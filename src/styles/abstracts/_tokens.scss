@@ -1,0 +1,7 @@
+// Design tokens como custom properties CSS.
+// Se amplía conforme el proyecto lo necesite (colores de estado, espaciados, etc.)
+:root {
+  --color-primary: #3b82f6;
+  --color-danger: #ef4444;
+  --color-success: #22c55e;
+}
