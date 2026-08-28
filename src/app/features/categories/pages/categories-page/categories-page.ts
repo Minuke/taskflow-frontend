@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
+import { CategoryForm } from '@features/categories/components/category-form/category-form';
+import { CategoryList } from '@features/categories/components/category-list/category-list';
 
 @Component({
-  imports: [],
   selector: 'app-categories-page',
-  styleUrl: './categories-page.scss',
+  imports: [CategoryForm, CategoryList],
   templateUrl: './categories-page.html',
+  styleUrl: './categories-page.scss',
 })
-export class CategoriesPage {
-}
+export class CategoriesPage {}

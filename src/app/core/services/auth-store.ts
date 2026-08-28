@@ -7,7 +7,16 @@ interface StoredUser extends User {
 
 @Service()
 export class AuthStore {
-  private readonly users = signal<StoredUser[]>([]);
+  private readonly users = signal<StoredUser[]>([
+  {
+    id: 1,
+    name: 'Admin',
+    email: 'admin@taskflow.dev',
+    password: 'Admin1234',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString(),
+  },
+]);
   private readonly currentUser = signal<User | null>(null);
 
   readonly user = this.currentUser.asReadonly();

@@ -1,0 +1,30 @@
+<form (submit)="onSubmit($event)">
+  <div class="form-group">
+    <label for="category-name">Nombre</label>
+    <input id="category-name" type="text" [formField]="categoryForm.name" />
+    @if (categoryForm.name().touched() && categoryForm.name().invalid()) {
+      @for (error of categoryForm.name().errors(); track error.kind) {
+        <p class="form-error">{{ error.message }}</p>
+      }
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="category-description">Descripción</label>
+    <textarea id="category-description" [formField]="categoryForm.description"></textarea>
+    @if (categoryForm.description().touched() && categoryForm.description().invalid()) {
+      @for (error of categoryForm.description().errors(); track error.kind) {
+        <p class="form-error">{{ error.message }}</p>
+      }
+    }
+  </div>
+
+  <div class="category-form-actions">
+    <button type="submit" [disabled]="categoryForm().invalid() || categoryForm().submitting()">
+      {{ category() ? 'Guardar cambios' : 'Crear categoría' }}
+    </button>
+    @if (category()) {
+      <button type="button" (click)="cancelled.emit()">Cancelar</button>
+    }
+  </div>
+</form>

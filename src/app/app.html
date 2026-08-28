@@ -1,1 +1,10 @@
+@if (authStore.isAuthenticated()) {
+  <nav class="temp-nav">
+    <a routerLink="/dashboard">Dashboard</a>
+    <a routerLink="/tasks">Tareas</a>
+    <a routerLink="/categories">Categorías</a>
+    <button type="button" (click)="onLogout()">Cerrar sesión</button>
+  </nav>
+}
+
 <router-outlet></router-outlet>
