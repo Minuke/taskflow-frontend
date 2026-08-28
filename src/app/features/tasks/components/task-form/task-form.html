@@ -1,0 +1,82 @@
+<form (submit)="onSubmit($event)">
+  <div class="form-group">
+    <label for="task-title">Título</label>
+    <input id="task-title" type="text" [formField]="taskForm.title" />
+    @if (taskForm.title().touched() && taskForm.title().invalid()) {
+      @for (error of taskForm.title().errors(); track error.kind) {
+        <p class="form-error">{{ error.message }}</p>
+      }
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="task-description">Descripción</label>
+    <textarea id="task-description" [formField]="taskForm.description"></textarea>
+    @if (taskForm.description().touched() && taskForm.description().invalid()) {
+      @for (error of taskForm.description().errors(); track error.kind) {
+        <p class="form-error">{{ error.message }}</p>
+      }
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="task-priority">Prioridad</label>
+    <select id="task-priority" [formField]="taskForm.priority">
+      <option [value]="Priority.Low">Baja</option>
+      <option [value]="Priority.Medium">Media</option>
+      <option [value]="Priority.High">Alta</option>
+    </select>
+  </div>
+
+  <div class="form-group">
+    <label for="task-hours">Horas estimadas</label>
+    <input id="task-hours" type="number" step="0.25" [formField]="taskForm.estimatedHours" />
+    @if (taskForm.estimatedHours().touched() && taskForm.estimatedHours().invalid()) {
+      @for (error of taskForm.estimatedHours().errors(); track error.kind) {
+        <p class="form-error">{{ error.message }}</p>
+      }
+    }
+  </div>
+
+  <div class="form-group">
+    <label for="task-due-date">Fecha límite</label>
+    <input id="task-due-date" type="date" [formField]="taskForm.dueDate" />
+  </div>
+
+  <div class="form-group">
+    <label for="task-category">Categoría</label>
+    <select id="task-category" [formField]="taskForm.categoryId">
+      <option value="">Sin categoría</option>
+      @for (category of categoriesStore.userCategories(); track category.id) {
+        <option [value]="category.id">{{ category.name }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="form-group form-group-checkbox">
+    <label for="task-completed">
+      <input id="task-completed" type="checkbox" [formField]="taskForm.completed" />
+      Completada
+    </label>
+  </div>
+
+  <div class="form-group">
+    <label for="task-image">Imagen</label>
+    <input id="task-image" type="file" accept="image/*" (change)="onImageSelected($event)" />
+    @if (model().image; as image) {
+      <div class="task-image-preview">
+        <img [src]="image" alt="Vista previa de la imagen de la tarea" />
+        <button type="button" (click)="removeImage()">Quitar imagen</button>
+      </div>
+    }
+  </div>
+
+  <div class="task-form-actions">
+    <button type="submit" [disabled]="taskForm().invalid() || taskForm().submitting()">
+      {{ task() ? 'Guardar cambios' : 'Crear tarea' }}
+    </button>
+    @if (task()) {
+      <button type="button" (click)="cancelled.emit()">Cancelar</button>
+    }
+  </div>
+</form>

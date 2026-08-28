@@ -3,6 +3,7 @@ import { CategoriesStore } from '@core/services/categories-store';
 import { Category } from '@core/models/category.model';
 import { CategoryForm } from '@features/categories/components/category-form/category-form';
 import { ConfirmDialog } from '@shared/components/confirm-dialog/confirm-dialog';
+import { TasksStore } from '@core/services/tasks-store';
 
 @Component({
   selector: 'app-category-list',
@@ -12,13 +13,14 @@ import { ConfirmDialog } from '@shared/components/confirm-dialog/confirm-dialog'
 })
 export class CategoryList {
   protected readonly categoriesStore = inject(CategoriesStore);
+  protected readonly tasksStore = inject(TasksStore);
 
   protected readonly editingId = signal<number | null>(null);
   protected readonly deletingCategory = signal<Category | null>(null);
 
   // Placeholder: el conteo real se conecta a TasksStore en A4, cuando exista.
   protected taskCountFor(categoryId: number): number {
-    return 0;
+    return this.tasksStore.userTasks().filter((task) => task.categoryId === categoryId).length;
   }
 
   protected onEdit(categoryId: number): void {

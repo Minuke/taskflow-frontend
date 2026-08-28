@@ -1,0 +1,26 @@
+@if (tasksStore.userTasks().length === 0) {
+  <p class="empty-state">Todavía no tienes tareas. Crea la primera con el formulario de arriba.</p>
+} @else {
+  <ul class="task-list">
+    @for (task of tasksStore.userTasks(); track task.id) {
+      <li class="task-list-item">
+        @if (editingId() === task.id) {
+          <app-task-form
+            [task]="task"
+            (saved)="onEditSaved()"
+            (cancelled)="onEditCancelled()">
+          </app-task-form>
+        } @else {
+          <div class="task-list-item-content">
+            <h4>{{ task.title }}</h4>
+            <p>{{ categoryNameFor(task.categoryId) }} · {{ task.priority }} · {{ task.completed ? 'Completada' : 'Pendiente' }}</p>
+            @if (task.dueDate) {
+              <p>Vence: {{ task.dueDate }}</p>
+            }
+            <button type="button" (click)="onEdit(task.id)">Editar</button>
+          </div>
+        }
+      </li>
+    }
+  </ul>
+}
