@@ -1,9 +1,101 @@
-@if (tasksStore.userTasks().length === 0) {
-  <p class="empty-state">Todavía no tienes tareas. Crea la primera con el formulario de arriba.</p>
+<div class="task-filters">
+  <div class="filter-group">
+    <label for="task-search">Buscar</label>
+    <input
+      id="task-search"
+      type="text"
+      placeholder="Título o descripción..."
+      [value]="searchTerm()"
+      (input)="onSearchInput($event)"
+    />
+  </div>
+
+  <div class="filter-group">
+    <label for="task-status-filter">Estado</label>
+    <select
+      id="task-status-filter"
+      [value]="statusFilter()"
+      (change)="onStatusFilterChange($event)">
+      <option [value]="TaskStatus.All">Todas</option>
+      <option [value]="TaskStatus.Pending">Pendientes</option>
+      <option [value]="TaskStatus.Completed">Completadas</option>
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <label for="task-priority-filter">Prioridad</label>
+    <select
+      id="task-priority-filter"
+      [value]="priorityFilter()"
+      (change)="onPriorityFilterChange($event)">
+      <option value="all">Todas</option>
+      <option [value]="Priority.Low">Baja</option>
+      <option [value]="Priority.Medium">Media</option>
+      <option [value]="Priority.High">Alta</option>
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <label for="task-category-filter">Categoría</label>
+    <select
+      id="task-category-filter"
+      [value]="categoryFilter()"
+      (change)="onCategoryFilterChange($event)">
+      <option value="all">Todas</option>
+      @for (category of categoriesStore.userCategories(); track category.id) {
+        <option [value]="category.id">{{ category.name }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <label for="task-due-filter">Fecha</label>
+    <select
+      id="task-due-filter"
+      [value]="dueFilter()"
+      (change)="onDueFilterChange($event)">
+      <option [value]="DueFilter.All">Todas</option>
+      <option [value]="DueFilter.Overdue">Vencidas</option>
+      <option [value]="DueFilter.Today">Hoy</option>
+      <option [value]="DueFilter.Upcoming">Próximas</option>
+      <option [value]="DueFilter.NoDate">Sin fecha</option>
+    </select>
+  </div>
+
+  <div class="filter-group">
+    <label for="task-sort-field">Ordenar por</label>
+    <select
+      id="task-sort-field"
+      [value]="sortField()"
+      (change)="onSortFieldChange($event)">
+      <option value="title">Título</option>
+      <option value="priority">Prioridad</option>
+      <option value="dueDate">Fecha de vencimiento</option>
+      <option value="createdAt">Fecha de creación</option>
+      <option value="updatedAt">Fecha de modificación</option>
+    </select>
+    <button type="button" (click)="toggleSortDirection()">
+      {{ sortDirection() === 'asc' ? '↑ Ascendente' : '↓ Descendente' }}
+    </button>
+  </div>
+</div>
+
+@if (filteredTasks().length === 0) {
+  <p class="empty-state">
+    @if (tasksStore.userTasks().length === 0) {
+      Todavía no tienes tareas. Crea la primera con el formulario de arriba.
+    } @else {
+      Ningún resultado coincide con la búsqueda o los filtros aplicados.
+    }
+  </p>
 } @else {
   <ul class="task-list">
-    @for (task of tasksStore.userTasks(); track task.id) {
-      <li class="task-list-item">
+    @for (task of filteredTasks(); track task.id) {
+      <li
+        class="task-list-item"
+        [class.task-list-item-overdue]="isOverdue(task.dueDate)"
+        [class.task-list-item-completed]="task.completed"
+        [class.task-list-item-high-priority]="task.priority === Priority.High">
         @if (editingId() === task.id) {
           <app-task-form
             [task]="task"
@@ -17,10 +109,22 @@
             @if (task.dueDate) {
               <p>Vence: {{ task.dueDate }}</p>
             }
-            <button type="button" (click)="onEdit(task.id)">Editar</button>
+            <div class="task-list-item-actions">
+              <button type="button" (click)="onEdit(task.id)">Editar</button>
+              <button type="button" (click)="onDeleteRequested(task)">Eliminar</button>
+            </div>
           </div>
         }
       </li>
     }
   </ul>
+}
+
+@if (deletingTask(); as task) {
+  <app-confirm-dialog
+    title="Eliminar tarea"
+    [message]="'¿Seguro que quieres eliminar la tarea ' + task.title + '? Esta acción no se puede deshacer.'"
+    (confirmed)="onDeleteConfirmed(task.id)"
+    (cancelled)="onDeleteCancelled()">
+  </app-confirm-dialog>
 }

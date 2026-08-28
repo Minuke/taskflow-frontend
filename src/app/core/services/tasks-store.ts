@@ -52,4 +52,8 @@ export class TasksStore {
       ),
     );
   }
+
+  delete(id: number): void {
+    this.tasks.update((list) => list.filter((task) => task.id !== id));
+  }
 }

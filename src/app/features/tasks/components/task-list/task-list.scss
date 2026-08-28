@@ -1,0 +1,11 @@
+.task-list-item-overdue {
+  border-left: 3px solid var(--color-danger);
+}
+
+.task-list-item-completed {
+  opacity: 0.6;
+}
+
+.task-list-item-high-priority h4::after {
+  content: ' 🔺';
+}
