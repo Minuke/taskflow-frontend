@@ -1,21 +1,13 @@
 <div class="task-filters">
   <div class="filter-group">
     <label for="task-search">Buscar</label>
-    <input
-      id="task-search"
-      type="text"
-      placeholder="Título o descripción..."
-      [value]="searchTerm()"
-      (input)="onSearchInput($event)"
-    />
+    <input id="task-search" type="text" placeholder="Título o descripción..." [value]="searchTerm()"
+      (input)="onSearchInput($event)" />
   </div>
 
   <div class="filter-group">
     <label for="task-status-filter">Estado</label>
-    <select
-      id="task-status-filter"
-      [value]="statusFilter()"
-      (change)="onStatusFilterChange($event)">
+    <select id="task-status-filter" [value]="statusFilter()" (change)="onStatusFilterChange($event)">
       <option [value]="TaskStatus.All">Todas</option>
       <option [value]="TaskStatus.Pending">Pendientes</option>
       <option [value]="TaskStatus.Completed">Completadas</option>
@@ -24,10 +16,7 @@
 
   <div class="filter-group">
     <label for="task-priority-filter">Prioridad</label>
-    <select
-      id="task-priority-filter"
-      [value]="priorityFilter()"
-      (change)="onPriorityFilterChange($event)">
+    <select id="task-priority-filter" [value]="priorityFilter()" (change)="onPriorityFilterChange($event)">
       <option value="all">Todas</option>
       <option [value]="Priority.Low">Baja</option>
       <option [value]="Priority.Medium">Media</option>
@@ -37,23 +26,17 @@
 
   <div class="filter-group">
     <label for="task-category-filter">Categoría</label>
-    <select
-      id="task-category-filter"
-      [value]="categoryFilter()"
-      (change)="onCategoryFilterChange($event)">
+    <select id="task-category-filter" [value]="categoryFilter()" (change)="onCategoryFilterChange($event)">
       <option value="all">Todas</option>
       @for (category of categoriesStore.userCategories(); track category.id) {
-        <option [value]="category.id">{{ category.name }}</option>
+      <option [value]="category.id">{{ category.name }}</option>
       }
     </select>
   </div>
 
   <div class="filter-group">
     <label for="task-due-filter">Fecha</label>
-    <select
-      id="task-due-filter"
-      [value]="dueFilter()"
-      (change)="onDueFilterChange($event)">
+    <select id="task-due-filter" [value]="dueFilter()" (change)="onDueFilterChange($event)">
       <option [value]="DueFilter.All">Todas</option>
       <option [value]="DueFilter.Overdue">Vencidas</option>
       <option [value]="DueFilter.Today">Hoy</option>
@@ -64,10 +47,7 @@
 
   <div class="filter-group">
     <label for="task-sort-field">Ordenar por</label>
-    <select
-      id="task-sort-field"
-      [value]="sortField()"
-      (change)="onSortFieldChange($event)">
+    <select id="task-sort-field" [value]="sortField()" (change)="onSortFieldChange($event)">
       <option value="title">Título</option>
       <option value="priority">Prioridad</option>
       <option value="dueDate">Fecha de vencimiento</option>
@@ -81,59 +61,50 @@
 </div>
 
 @if (filteredTasks().length === 0) {
-  <p class="empty-state">
-    @if (tasksStore.userTasks().length === 0) {
-      Todavía no tienes tareas. Crea la primera con el formulario de arriba.
-    } @else {
-      Ningún resultado coincide con la búsqueda o los filtros aplicados.
-    }
-  </p>
+<p class="empty-state">
+  @if (tasksStore.userTasks().length === 0) {
+  Todavía no tienes tareas. Crea la primera con el formulario de arriba.
+  } @else {
+  Ningún resultado coincide con la búsqueda o los filtros aplicados.
+  }
+</p>
 } @else {
-  <ul class="task-list">
-    @for (task of paginatedTasks(); track task.id) {
-      <li
-        class="task-list-item"
-        [class.task-list-item-overdue]="isOverdue(task.dueDate)"
-        [class.task-list-item-completed]="task.completed"
-        [class.task-list-item-high-priority]="task.priority === Priority.High">
-        @if (editingId() === task.id) {
-          <app-task-form
-            [task]="task"
-            (saved)="onEditSaved()"
-            (cancelled)="onEditCancelled()">
-          </app-task-form>
-        } @else {
-          <div class="task-list-item-content">
-            <h4>{{ task.title }}</h4>
-            <p>{{ categoryNameFor(task.categoryId) }} · {{ task.priority }} · {{ task.completed ? 'Completada' : 'Pendiente' }}</p>
-            @if (task.dueDate) {
-              <p>Vence: {{ task.dueDate }}</p>
-            }
-            <div class="task-list-item-actions">
-              <button type="button" (click)="onEdit(task.id)">Editar</button>
-              <button type="button" (click)="onDeleteRequested(task)">Eliminar</button>
-            </div>
-          </div>
-        }
-      </li>
+<ul class="task-list">
+  @for (task of paginatedTasks(); track task.id) {
+  <li class="task-list-item" [class.task-list-item-overdue]="isOverdue(task.dueDate)"
+    [class.task-list-item-completed]="task.completed"
+    [class.task-list-item-high-priority]="task.priority === Priority.High">
+    @if (editingId() === task.id) {
+    <app-task-form [task]="task" (saved)="onEditSaved()" (cancelled)="onEditCancelled()">
+    </app-task-form>
+    } @else {
+    <div class="task-list-item-content">
+      <h4>{{ task.title }}</h4>
+      <p>{{ categoryNameFor(task.categoryId) }} · {{ task.priority }} · {{ task.completed ? 'Completada' : 'Pendiente'
+        }}</p>
+      @if (task.dueDate) {
+      <p>Vence: {{ task.dueDate }}</p>
+      }
+      <div class="task-list-item-actions">
+        <button type="button" (click)="onEdit(task.id)">Editar</button>
+        <button type="button" (click)="onDeleteRequested(task)">Eliminar</button>
+      </div>
+    </div>
     }
-  </ul>
+  </li>
+  }
+</ul>
 }
 
 @if (filteredTasks().length > 0) {
-  <app-pagination
-    [totalItems]="totalFilteredTasks()"
-    [pageSize]="pageSize"
-    [currentPage]="currentPage()"
-    (pageChanged)="onPageChanged($event)">
-  </app-pagination>
+<app-pagination [totalItems]="totalFilteredTasks()" [pageSize]="pageSize" [currentPage]="currentPage()"
+  (pageChanged)="onPageChanged($event)">
+</app-pagination>
 }
 
 @if (deletingTask(); as task) {
-  <app-confirm-dialog
-    title="Eliminar tarea"
-    [message]="'¿Seguro que quieres eliminar la tarea ' + task.title + '? Esta acción no se puede deshacer.'"
-    (confirmed)="onDeleteConfirmed(task.id)"
-    (cancelled)="onDeleteCancelled()">
-  </app-confirm-dialog>
+<app-confirm-dialog title="Eliminar tarea"
+  [message]="'¿Seguro que quieres eliminar la tarea ' + task.title + '? Esta acción no se puede deshacer.'"
+  (confirmed)="onDeleteConfirmed(task.id)" (cancelled)="onDeleteCancelled()">
+</app-confirm-dialog>
 }
