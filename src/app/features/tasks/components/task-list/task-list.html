@@ -90,7 +90,7 @@
   </p>
 } @else {
   <ul class="task-list">
-    @for (task of filteredTasks(); track task.id) {
+    @for (task of paginatedTasks(); track task.id) {
       <li
         class="task-list-item"
         [class.task-list-item-overdue]="isOverdue(task.dueDate)"
@@ -118,6 +118,15 @@
       </li>
     }
   </ul>
+}
+
+@if (filteredTasks().length > 0) {
+  <app-pagination
+    [totalItems]="totalFilteredTasks()"
+    [pageSize]="pageSize"
+    [currentPage]="currentPage()"
+    (pageChanged)="onPageChanged($event)">
+  </app-pagination>
 }
 
 @if (deletingTask(); as task) {

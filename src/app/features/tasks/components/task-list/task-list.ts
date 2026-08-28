@@ -1,4 +1,4 @@
-import { Component, inject, signal, computed } from '@angular/core';
+import { Component, inject, signal, computed, effect } from '@angular/core';
 import { TasksStore } from '@core/services/tasks-store';
 import { CategoriesStore } from '@core/services/categories-store';
 import { TaskForm } from '@features/tasks/components/task-form/task-form';
@@ -9,13 +9,14 @@ import { TaskStatus } from '@core/models/task-status.enum';
 import { DueFilter } from '@core/models/due-filter.enum';
 import { isOverdue, isDueToday, isUpcoming } from '@core/utils/task-date.utils';
 import { priorityWeight } from '@core/utils/priority.utils';
+import { Pagination } from '@shared/components/pagination/pagination';
 
 type TaskSortField = 'title' | 'priority' | 'dueDate' | 'createdAt' | 'updatedAt';
 type SortDirection = 'asc' | 'desc';
 
 @Component({
   selector: 'app-task-list',
-  imports: [TaskForm, ConfirmDialog],
+  imports: [TaskForm, ConfirmDialog, Pagination],
   templateUrl: './task-list.html',
   styleUrl: './task-list.scss',
 })
@@ -23,12 +24,16 @@ export class TaskList {
   protected readonly tasksStore = inject(TasksStore);
   protected readonly categoriesStore = inject(CategoriesStore);
 
+  private static readonly PAGE_SIZE = 5;
+
   protected readonly TaskStatus = TaskStatus;
   protected readonly Priority = Priority;
   protected readonly DueFilter = DueFilter;
+  protected readonly pageSize = TaskList.PAGE_SIZE;
 
   protected readonly editingId = signal<number | null>(null);
   protected readonly deletingTask = signal<Task | null>(null);
+  protected readonly currentPage = signal(1);
 
   protected readonly searchTerm = signal('');
   protected readonly statusFilter = signal<TaskStatus>(TaskStatus.All);
@@ -37,6 +42,14 @@ export class TaskList {
   protected readonly dueFilter = signal<DueFilter>(DueFilter.All);
   protected readonly sortField = signal<TaskSortField>('dueDate');
   protected readonly sortDirection = signal<SortDirection>('asc');
+
+  protected readonly paginatedTasks = computed(() => {
+    const tasks = this.filteredTasks();
+    const start = (this.currentPage() - 1) * this.pageSize;
+    return tasks.slice(start, start + this.pageSize);
+  });
+
+  protected readonly totalFilteredTasks = computed(() => this.filteredTasks().length);
 
   // Cadena de computed(): cada filtro parte del resultado del anterior.
   // Así se combinan todos a la vez sin recalcular desde cero en cada paso.
@@ -99,6 +112,20 @@ export class TaskList {
     const tasks = [...this.dueFilteredTasks()];
     return this.sortTasks(tasks);
   });
+
+  constructor() {
+    effect(() => {
+      // Cualquier cambio en los criterios de filtrado/búsqueda/orden vuelve a la página 1.
+      this.searchTerm();
+      this.statusFilter();
+      this.priorityFilter();
+      this.categoryFilter();
+      this.dueFilter();
+      this.sortField();
+      this.sortDirection();
+      this.currentPage.set(1);
+    });
+  }
 
   protected isOverdue(dueDate: string | null): boolean {
     return isOverdue(dueDate);
@@ -171,6 +198,10 @@ export class TaskList {
   protected onDeleteConfirmed(taskId: number): void {
     this.tasksStore.delete(taskId);
     this.deletingTask.set(null);
+  }
+
+  protected onPageChanged(page: number): void {
+    this.currentPage.set(page);
   }
 
   private sortTasks(tasks: Task[]): Task[] {

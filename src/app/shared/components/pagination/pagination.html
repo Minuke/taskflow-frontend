@@ -1,0 +1,17 @@
+<div class="pagination">
+  <p class="pagination-info">
+    Mostrando {{ rangeStart() }}–{{ rangeEnd() }} de {{ totalItems() }}
+  </p>
+
+  <div class="pagination-controls">
+    <button type="button" [disabled]="!canGoPrevious()" (click)="goToPrevious()">
+      Anterior
+    </button>
+
+    <span class="pagination-current">Página {{ currentPage() }} de {{ totalPages() }}</span>
+
+    <button type="button" [disabled]="!canGoNext()" (click)="goToNext()">
+      Siguiente
+    </button>
+  </div>
+</div>
