@@ -1,0 +1,23 @@
+.detail-page {
+  max-width: 40rem;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.detail-meta {
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.detail-dates {
+  color: var(--color-text-muted);
+  font-size: 0.8rem;
+  margin-top: var(--space-4);
+}
+
+.detail-image {
+  max-width: 100%;
+  border-radius: var(--radius-md);
+  margin: var(--space-2) 0;
+}

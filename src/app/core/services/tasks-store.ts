@@ -77,4 +77,8 @@ export class TasksStore {
       ),
     );
   }
+
+  taskById(id: number): Task | undefined {
+    return this.userTasks().find((task) => task.id === id);
+  }
 }

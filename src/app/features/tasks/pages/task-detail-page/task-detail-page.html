@@ -1,0 +1,22 @@
+@if (task(); as t) {
+  <div class="detail-page card">
+    <a routerLink="/tasks">← Volver a tareas</a>
+    <h2>{{ t.title }}</h2>
+    <p class="detail-meta">
+      {{ categoryName() }} · {{ t.priority }} · {{ t.completed ? 'Completada' : 'Pendiente' }}
+    </p>
+    @if (t.dueDate) {
+      <p>Fecha límite: {{ t.dueDate }}</p>
+    }
+    <p>Horas estimadas: {{ t.estimatedHours }}</p>
+    @if (t.description) {
+      <p>{{ t.description }}</p>
+    }
+    @if (t.image; as image) {
+      <img [src]="image" alt="Imagen de la tarea" class="detail-image" />
+    }
+    <p class="detail-dates">Creada: {{ t.createdAt }} · Modificada: {{ t.updatedAt }}</p>
+  </div>
+} @else {
+  <p class="empty-state">Esta tarea no existe o no tienes acceso a ella.</p>
+}

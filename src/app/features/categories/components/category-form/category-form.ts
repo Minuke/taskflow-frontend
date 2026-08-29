@@ -54,6 +54,7 @@ export class CategoryForm {
       } else {
         this.categoriesStore.create(name, trimmedDescription || null);
         this.model.set({ name: '', description: '' });
+        this.categoryForm().reset();
       }
 
       this.saved.emit();

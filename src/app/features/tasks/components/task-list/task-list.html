@@ -26,11 +26,10 @@
     <select id="task-category-filter" [value]="categoryFilter()" (change)="onCategoryFilterChange($event)">
       <option value="all">Todas</option>
       @for (category of categoriesStore.userCategories(); track category.id) {
-      <option [value]="category.id">{{ category.name }}</option>
+        <option [value]="category.id">{{ category.name }}</option>
       }
     </select>
   </div>
-
   <div class="filter-group">
     <label for="task-due-filter">Fecha</label>
     <select id="task-due-filter" [value]="dueFilter()" (change)="onDueFilterChange($event)">
@@ -56,65 +55,58 @@
   </div>
 </div>
 
-<button type="button" class="dev-only" (click)="onSimulateError()">
-  Simular error de carga (demo)
-</button>
-
 @if (tasksStore.isLoading()) {
-<app-skeleton-list [rows]="5"></app-skeleton-list>
+  <app-skeleton-list [rows]="5"></app-skeleton-list>
 } @else if (tasksStore.error(); as error) {
-<div class="error-state">
-  <p>{{ error }}</p>
-  <button type="button" (click)="onRetry()">Reintentar</button>
-</div>
+  <div class="error-state">
+    <p>{{ error }}</p>
+    <button type="button" (click)="onRetry()">Reintentar</button>
+  </div>
 } @else if (filteredTasks().length === 0) {
-<p class="empty-state">
-  @if (tasksStore.userTasks().length === 0) {
-  Todavía no tienes tareas. Crea la primera con el formulario de arriba.
-  } @else {
-  Ningún resultado coincide con la búsqueda o los filtros aplicados.
-  }
-</p>
-} @else {
-<ul class="task-list">
-  @for (task of paginatedTasks(); track task.id) {
-  <li class="task-list-item card" [class.task-list-item-overdue]="isOverdue(task.dueDate)"
-    [class.task-list-item-completed]="task.completed"
-    [class.task-list-item-high-priority]="task.priority === Priority.High">
-    @if (editingId() === task.id) {
-    <app-task-form [task]="task" (saved)="onEditSaved()" (cancelled)="onEditCancelled()">
-    </app-task-form>
+  <p class="empty-state">
+    @if (tasksStore.userTasks().length === 0) {
+      Todavía no tienes tareas. Crea la primera con el botón "Crear tarea".
     } @else {
-    <div class="task-list-item-content">
-      <h4>{{ task.title }}</h4>
-      <p>{{ categoryNameFor(task.categoryId) }} · {{ task.priority }} · {{ task.completed ? 'Completada' : 'Pendiente'
-        }}</p>
-      @if (task.dueDate) {
-      <p>Vence: {{ task.dueDate }}</p>
-      }
-      <div class="task-list-item-actions">
-        <button type="button" (click)="onEdit(task.id)">Editar</button>
-        <button type="button" class="btn-danger" (click)="onDeleteRequested(task)">Eliminar</button>
-        <button type="button" (click)="onToggleComplete(task.id)">
-          {{ task.completed ? 'Reabrir' : 'Completar' }}
-        </button>
-      </div>
-    </div>
+      Ningún resultado coincide con la búsqueda o los filtros aplicados.
     }
-  </li>
-  }
-</ul>
+  </p>
+} @else {
+  <ul class="task-list">
+    @for (task of paginatedTasks(); track task.id) {
+      <li class="task-list-item card card-compact" [class.task-list-item-overdue]="isOverdue(task.dueDate)"
+        [class.task-list-item-completed]="task.completed"
+        [class.task-list-item-high-priority]="task.priority === Priority.High">
+        @if (editingId() === task.id) {
+          <app-task-form [task]="task" (saved)="onEditSaved()" (cancelled)="onEditCancelled()"></app-task-form>
+        } @else {
+          <div class="task-list-item-content">
+            <h4>{{ task.title }}</h4>
+            <p>{{ categoryNameFor(task.categoryId) }} · {{ task.priority }} · {{ task.completed ? 'Completada' : 'Pendiente' }}</p>
+            @if (task.dueDate) {
+              <p>Vence: {{ task.dueDate }}</p>
+            }
+            <div class="task-list-item-actions">
+              <a [routerLink]="['/tasks', task.id]">Ver</a>
+              <button type="button" (click)="onEdit(task.id)">Editar</button>
+              <button type="button" (click)="onToggleComplete(task.id)">
+                {{ task.completed ? 'Reabrir' : 'Completar' }}
+              </button>
+              <button type="button" class="btn-danger" (click)="onDeleteRequested(task)">Eliminar</button>
+            </div>
+          </div>
+        }
+      </li>
+    }
+  </ul>
 
-@if (filteredTasks().length > 0) {
-<app-pagination [totalItems]="totalFilteredTasks()" [pageSize]="pageSize" [currentPage]="currentPage()"
-  (pageChanged)="onPageChanged($event)">
-</app-pagination>
-}
+  @if (filteredTasks().length > 0) {
+    <app-pagination [totalItems]="totalFilteredTasks()" [pageSize]="pageSize" [currentPage]="currentPage()"
+      (pageChanged)="onPageChanged($event)"></app-pagination>
+  }
 }
 
 @if (deletingTask(); as task) {
-<app-confirm-dialog title="Eliminar tarea"
-  [message]="'¿Seguro que quieres eliminar la tarea ' + task.title + '? Esta acción no se puede deshacer.'"
-  (confirmed)="onDeleteConfirmed(task.id)" (cancelled)="onDeleteCancelled()">
-</app-confirm-dialog>
+  <app-confirm-dialog title="Eliminar tarea"
+    [message]="'¿Seguro que quieres eliminar la tarea ' + task.title + '? Esta acción no se puede deshacer.'"
+    (confirmed)="onDeleteConfirmed(task.id)" (cancelled)="onDeleteCancelled()"></app-confirm-dialog>
 }

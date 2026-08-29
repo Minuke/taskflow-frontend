@@ -1,7 +1,3 @@
-<button type="button" class="dev-only" (click)="onSimulateError()">
-  Simular error de carga (demo)
-</button>
-
 @if (categoriesStore.isLoading()) {
   <app-skeleton-list [rows]="3"></app-skeleton-list>
 } @else if (categoriesStore.error(); as error) {
@@ -10,25 +6,19 @@
     <button type="button" (click)="onRetry()">Reintentar</button>
   </div>
 } @else if (categoriesStore.userCategories().length === 0) {
-  <p class="empty-state">Todavía no tienes categorías. Crea la primera con el formulario de arriba.</p>
+  <p class="empty-state">Todavía no tienes categorías. Crea la primera con el botón "Crear categoría".</p>
 } @else {
   <ul class="category-list">
     @for (category of categoriesStore.userCategories(); track category.id) {
-      <li class="category-list-item card">
+      <li class="category-list-item card card-compact">
         @if (editingId() === category.id) {
-          <app-category-form
-            [category]="category"
-            (saved)="onEditSaved()"
-            (cancelled)="onEditCancelled()">
-          </app-category-form>
+          <app-category-form [category]="category" (saved)="onEditSaved()" (cancelled)="onEditCancelled()"></app-category-form>
         } @else {
           <div class="category-list-item-content">
             <h4>{{ category.name }}</h4>
-            @if (category.description) {
-              <p>{{ category.description }}</p>
-            }
             <p class="category-task-count">{{ taskCountFor(category.id) }} tareas</p>
             <div class="category-list-item-actions">
+              <a [routerLink]="['/categories', category.id]">Ver</a>
               <button type="button" (click)="onEdit(category.id)">Editar</button>
               <button type="button" class="btn-danger" (click)="onDeleteRequested(category)">Eliminar</button>
             </div>
@@ -40,10 +30,7 @@
 }
 
 @if (deletingCategory(); as category) {
-  <app-confirm-dialog
-    title="Eliminar categoría"
+  <app-confirm-dialog title="Eliminar categoría"
     [message]="'¿Seguro que quieres eliminar la categoría ' + category.name + '? Las tareas asociadas se quedarán sin categoría.'"
-    (confirmed)="onDeleteConfirmed(category.id)"
-    (cancelled)="onDeleteCancelled()">
-  </app-confirm-dialog>
+    (confirmed)="onDeleteConfirmed(category.id)" (cancelled)="onDeleteCancelled()"></app-confirm-dialog>
 }

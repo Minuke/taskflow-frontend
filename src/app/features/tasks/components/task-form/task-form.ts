@@ -91,6 +91,7 @@ export class TaskForm {
       } else {
         this.tasksStore.create(taskInput);
         this.model.set(this.emptyModel());
+        this.taskForm().reset();
       }
 
       this.saved.emit();

@@ -1,47 +1,105 @@
+/**
+ * Modern CSS Reset — genérico y reutilizable en cualquier proyecto.
+ * No contiene colores, tipografías ni tokens: solo neutraliza comportamiento
+ * inconsistente entre navegadores.
+ */
+
 *,
 *::before,
 *::after {
   box-sizing: border-box;
 }
 
-body {
+* {
   margin: 0;
-  font-family: system-ui, -apple-system, 'Segoe UI', sans-serif;
-  color: var(--color-text);
-  background: var(--color-background);
-  line-height: 1.5;
+  padding: 0;
 }
 
-a {
-  color: var(--color-primary);
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  hanging-punctuation: first last;
+}
+
+body {
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeSpeed;
+  min-height: 100dvh;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+input,
+button,
+textarea,
+select {
+  font: inherit;
+  color: inherit;
 }
 
 button {
-  font: inherit;
-  cursor: pointer;
-  padding: var(--space-2) var(--space-4);
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--color-border);
-  background: var(--color-surface);
-  color: var(--color-text);
-  transition: background-color 0.15s ease, border-color 0.15s ease;
+  background: none;
+  border: none;
 }
 
-button:hover:not(:disabled) {
-  border-color: var(--color-primary);
+p,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  overflow-wrap: break-word;
 }
 
-button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  text-wrap: balance;
 }
 
-button[type='submit'] {
-  background: var(--color-primary);
-  border-color: var(--color-primary);
-  color: white;
+p {
+  text-wrap: pretty;
 }
 
-button[type='submit']:hover:not(:disabled) {
-  background: var(--color-primary-dark);
+ul,
+ol {
+  list-style: none;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+fieldset {
+  border: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }

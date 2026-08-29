@@ -5,10 +5,11 @@ import { Category } from '@core/models/category.model';
 import { CategoryForm } from '@features/categories/components/category-form/category-form';
 import { ConfirmDialog } from '@shared/components/confirm-dialog/confirm-dialog';
 import { SkeletonList } from '@shared/components/skeleton-list/skeleton-list';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-category-list',
-  imports: [CategoryForm, ConfirmDialog, SkeletonList],
+  imports: [RouterLink, CategoryForm, ConfirmDialog, SkeletonList],
   templateUrl: './category-list.html',
   styleUrl: './category-list.scss',
 })
@@ -25,10 +26,6 @@ export class CategoryList {
 
   protected onRetry(): void {
     this.categoriesStore.load();
-  }
-
-  protected onSimulateError(): void {
-    this.categoriesStore.load({ forceError: true });
   }
 
   protected taskCountFor(categoryId: number): number {

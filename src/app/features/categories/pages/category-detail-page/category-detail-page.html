@@ -1,0 +1,25 @@
+@if (category(); as c) {
+  <div class="detail-page card">
+    <a routerLink="/categories">← Volver a categorías</a>
+    <h2>{{ c.name }}</h2>
+    @if (c.description) {
+      <p>{{ c.description }}</p>
+    }
+    <p class="detail-meta">{{ associatedTasks().length }} tareas asociadas</p>
+    <p class="detail-dates">Creada: {{ c.createdAt }} · Modificada: {{ c.updatedAt }}</p>
+
+    @if (associatedTasks().length > 0) {
+      <ul class="task-list">
+        @for (task of associatedTasks(); track task.id) {
+          <li class="task-list-item card card-compact">
+            <a [routerLink]="['/tasks', task.id]">{{ task.title }}</a>
+          </li>
+        }
+      </ul>
+    } @else {
+      <p class="empty-state">Esta categoría todavía no tiene tareas asociadas.</p>
+    }
+  </div>
+} @else {
+  <p class="empty-state">Esta categoría no existe o no tienes acceso a ella.</p>
+}

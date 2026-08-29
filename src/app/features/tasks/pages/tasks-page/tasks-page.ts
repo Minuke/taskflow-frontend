@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
-import { TaskForm } from '@features/tasks/components/task-form/task-form';
+import { RouterLink } from '@angular/router';
 import { TaskList } from '@features/tasks/components/task-list/task-list';
 
 @Component({
   selector: 'app-tasks-page',
-  imports: [TaskForm, TaskList],
+  imports: [RouterLink, TaskList],
   templateUrl: './tasks-page.html',
   styleUrl: './tasks-page.scss',
 })

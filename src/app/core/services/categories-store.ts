@@ -58,4 +58,9 @@ export class CategoriesStore {
   delete(id: number): void {
     this.categories.update((list) => list.filter((category) => category.id !== id));
   }
+
+  categoryById(id: number): Category | undefined {
+    return this.userCategories().find((category) => category.id === id);
+  }
+
 }

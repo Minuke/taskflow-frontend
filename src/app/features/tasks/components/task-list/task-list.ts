@@ -1,4 +1,5 @@
 import { Component, inject, signal, computed, effect } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { TasksStore } from '@core/services/tasks-store';
 import { CategoriesStore } from '@core/services/categories-store';
 import { TaskForm } from '@features/tasks/components/task-form/task-form';
@@ -17,7 +18,7 @@ type SortDirection = 'asc' | 'desc';
 
 @Component({
   selector: 'app-task-list',
-  imports: [TaskForm, ConfirmDialog, Pagination, SkeletonList],
+  imports: [RouterLink, TaskForm, ConfirmDialog, Pagination, SkeletonList],
   templateUrl: './task-list.html',
   styleUrl: './task-list.scss',
 })
@@ -25,7 +26,7 @@ export class TaskList {
   protected readonly tasksStore = inject(TasksStore);
   protected readonly categoriesStore = inject(CategoriesStore);
 
-  private static readonly PAGE_SIZE = 5;
+  private static readonly PAGE_SIZE = 10;
 
   protected readonly TaskStatus = TaskStatus;
   protected readonly Priority = Priority;
@@ -52,8 +53,6 @@ export class TaskList {
 
   protected readonly totalFilteredTasks = computed(() => this.filteredTasks().length);
 
-  // Cadena de computed(): cada filtro parte del resultado del anterior.
-  // Así se combinan todos a la vez sin recalcular desde cero en cada paso.
   private readonly searchedTasks = computed(() => {
     const term = this.searchTerm().trim().toLowerCase();
     const tasks = this.tasksStore.userTasks();
@@ -94,7 +93,6 @@ export class TaskList {
   private readonly dueFilteredTasks = computed(() => {
     const due = this.dueFilter();
     const tasks = this.categoryFilteredTasks();
-
     switch (due) {
       case DueFilter.Overdue:
         return tasks.filter((task) => isOverdue(task.dueDate));
@@ -118,7 +116,6 @@ export class TaskList {
     this.tasksStore.load();
 
     effect(() => {
-      // Cualquier cambio en los criterios de filtrado/búsqueda/orden vuelve a la página 1.
       this.searchTerm();
       this.statusFilter();
       this.priorityFilter();
@@ -131,11 +128,7 @@ export class TaskList {
   }
 
   protected onRetry(): void {
-   this.tasksStore.load();
-  }
-
-  protected onSimulateError(): void {
-    this.tasksStore.load({ forceError: true });
+    this.tasksStore.load();
   }
 
   protected onToggleComplete(taskId: number): void {
@@ -157,13 +150,11 @@ export class TaskList {
   }
 
   protected onSearchInput(event: Event): void {
-    const value = (event.target as HTMLInputElement).value;
-    this.searchTerm.set(value);
+    this.searchTerm.set((event.target as HTMLInputElement).value);
   }
 
   protected onStatusFilterChange(event: Event): void {
-    const value = (event.target as HTMLSelectElement).value as TaskStatus;
-    this.statusFilter.set(value);
+    this.statusFilter.set((event.target as HTMLSelectElement).value as TaskStatus);
   }
 
   protected onPriorityFilterChange(event: Event): void {
@@ -177,13 +168,11 @@ export class TaskList {
   }
 
   protected onDueFilterChange(event: Event): void {
-    const value = (event.target as HTMLSelectElement).value as DueFilter;
-    this.dueFilter.set(value);
+    this.dueFilter.set((event.target as HTMLSelectElement).value as DueFilter);
   }
 
   protected onSortFieldChange(event: Event): void {
-    const value = (event.target as HTMLSelectElement).value as TaskSortField;
-    this.sortField.set(value);
+    this.sortField.set((event.target as HTMLSelectElement).value as TaskSortField);
   }
 
   protected toggleSortDirection(): void {
@@ -242,7 +231,7 @@ export class TaskList {
 
   private compareNullableDates(a: string | null, b: string | null): number {
     if (a === b) return 0;
-    if (a === null) return 1; // Sin fecha siempre al final, independientemente de la dirección de orden.
+    if (a === null) return 1;
     if (b === null) return -1;
     return a.localeCompare(b);
   }
