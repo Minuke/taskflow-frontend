@@ -1,0 +1,14 @@
+@if (tasksStore.isLoading()) {
+  <app-skeleton-list [rows]="3"></app-skeleton-list>
+} @else if (tasksStore.error(); as error) {
+  <div class="error-state">
+    <p>{{ error }}</p>
+    <button type="button" (click)="onRetry()">Reintentar</button>
+  </div>
+} @else if (tasksStore.userTasks().length === 0) {
+  <app-dashboard-empty-state></app-dashboard-empty-state>
+} @else {
+  <app-dashboard-summary></app-dashboard-summary>
+  <app-upcoming-tasks></app-upcoming-tasks>
+  <app-recent-tasks></app-recent-tasks>
+}

@@ -1,0 +1,19 @@
+<section class="dashboard-section">
+  <h3>Tareas recientes</h3>
+  @if (recentTasks().length === 0) {
+    <p class="empty-state">Todavía no has creado ninguna tarea.</p>
+  } @else {
+    <ul class="dashboard-task-list">
+      @for (task of recentTasks(); track task.id) {
+        <li>
+          <span class="dashboard-task-title">{{ task.title }}</span>
+          <span class="dashboard-task-meta">
+            {{ categoryNameFor(task.categoryId) }} · {{ task.priority }} ·
+            {{ task.completed ? 'Completada' : 'Pendiente' }}
+          </span>
+        </li>
+      }
+    </ul>
+    <a routerLink="/tasks">Ver todas las tareas</a>
+  }
+</section>

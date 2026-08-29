@@ -1,0 +1,18 @@
+<section class="dashboard-section">
+  <h3>Próximas tareas</h3>
+  @if (upcomingTasks().length === 0) {
+    <p class="empty-state">No tienes tareas pendientes con fecha límite próxima.</p>
+  } @else {
+    <ul class="dashboard-task-list">
+      @for (task of upcomingTasks(); track task.id) {
+        <li>
+          <span class="dashboard-task-title">{{ task.title }}</span>
+          <span class="dashboard-task-meta">
+            {{ categoryNameFor(task.categoryId) }} · {{ task.priority }} · {{ task.dueDate }}
+          </span>
+        </li>
+      }
+    </ul>
+    <a routerLink="/tasks">Ver todas las tareas</a>
+  }
+</section>

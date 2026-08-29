@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
+import { DashboardOverview } from '@features/dashboard/components/dashboard-overview/dashboard-overview';
 
 @Component({
-  imports: [],
   selector: 'app-dashboard-page',
-  styleUrl: './dashboard-page.scss',
+  imports: [DashboardOverview],
   templateUrl: './dashboard-page.html',
+  styleUrl: './dashboard-page.scss',
 })
-export class DashboardPage {
-}
+export class DashboardPage {}
