@@ -1,0 +1,5 @@
+.dashboard-page {
+  display: grid;
+  grid-template-areas: 'header' 'content';
+  gap: var(--space-6);
+}

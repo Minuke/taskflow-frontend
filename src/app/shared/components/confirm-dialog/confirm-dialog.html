@@ -6,7 +6,7 @@
     <p>{{ message() }}</p>
     <div class="confirm-dialog-actions">
       <button type="button" (click)="cancelled.emit()">Cancelar</button>
-      <button type="button" (click)="confirmed.emit()">Confirmar</button>
+      <button type="button" class="btn-danger" (click)="confirmed.emit()">Confirmar</button>
     </div>
   </div>
 </div>

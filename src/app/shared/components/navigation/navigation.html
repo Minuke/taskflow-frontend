@@ -1,0 +1,23 @@
+@if (authStore.isAuthenticated()) {
+<nav class="navbar">
+  <a class="navbar-logo" routerLink="/dashboard" (click)="closeMenu()">TaskFlow</a>
+
+  <button
+    type="button"
+    class="navbar-toggle"
+    [attr.aria-expanded]="isMenuOpen()"
+    aria-label="Abrir menú de navegación"
+    (click)="toggleMenu()">
+    <span class="navbar-toggle-bar"></span>
+    <span class="navbar-toggle-bar"></span>
+    <span class="navbar-toggle-bar"></span>
+  </button>
+
+  <div class="navbar-menu" [class.navbar-menu-open]="isMenuOpen()">
+    <a routerLink="/dashboard" routerLinkActive="navbar-link-active" (click)="closeMenu()">Dashboard</a>
+    <a routerLink="/tasks" routerLinkActive="navbar-link-active" (click)="closeMenu()">Tareas</a>
+    <a routerLink="/categories" routerLinkActive="navbar-link-active" (click)="closeMenu()">Categorías</a>
+    <button type="button" (click)="onLogout()">Cerrar sesión</button>
+  </div>
+</nav>
+}

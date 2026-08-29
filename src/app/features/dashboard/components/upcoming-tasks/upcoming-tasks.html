@@ -5,7 +5,7 @@
   } @else {
     <ul class="dashboard-task-list">
       @for (task of upcomingTasks(); track task.id) {
-        <li>
+        <li class="card">
           <span class="dashboard-task-title">{{ task.title }}</span>
           <span class="dashboard-task-meta">
             {{ categoryNameFor(task.categoryId) }} · {{ task.priority }} · {{ task.dueDate }}

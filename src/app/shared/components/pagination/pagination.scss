@@ -1,13 +1,18 @@
 .pagination {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
+  gap: var(--space-2);
   align-items: center;
-  margin-top: 1rem;
+  margin-top: var(--space-4);
 }
 
 .pagination-controls {
   display: flex;
-  gap: 1rem;
+  gap: var(--space-4);
   align-items: center;
+}
+
+.pagination-info {
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
 }

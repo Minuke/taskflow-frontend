@@ -1,7 +1,30 @@
-// Design tokens como custom properties CSS.
-// Se amplía conforme el proyecto lo necesite (colores de estado, espaciados, etc.)
 :root {
+  // Color
   --color-primary: #3b82f6;
+  --color-primary-dark: #2563eb;
   --color-danger: #ef4444;
+  --color-danger-dark: #dc2626;
   --color-success: #22c55e;
+  --color-warning: #f59e0b;
+
+  --color-text: #111827;
+  --color-text-muted: #6b7280;
+  --color-border: #e5e7eb;
+  --color-surface: #ffffff;
+  --color-background: #f9fafb;
+
+  // Espaciado
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+
+  // Radios y sombras
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --shadow-sm: 0 1px 2px rgb(0 0 0 / 5%);
+  --shadow-md: 0 4px 6px rgb(0 0 0 / 7%);
 }

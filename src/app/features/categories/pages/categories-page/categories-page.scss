@@ -1,0 +1,27 @@
+@use 'abstracts/breakpoints' as *;
+
+.categories-page {
+  display: grid;
+  grid-template-areas: 'header' 'form' 'list';
+  gap: var(--space-6);
+
+  @include breakpoint-up($breakpoint-lg) {
+    grid-template-columns: 320px 1fr;
+    grid-template-areas:
+      'header header'
+      'form   list';
+    align-items: start;
+  }
+}
+
+.categories-page-header {
+  grid-area: header;
+}
+
+.categories-page-form {
+  grid-area: form;
+}
+
+.categories-page-list {
+  grid-area: list;
+}

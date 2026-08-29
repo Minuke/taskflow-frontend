@@ -14,7 +14,7 @@
 } @else {
   <ul class="category-list">
     @for (category of categoriesStore.userCategories(); track category.id) {
-      <li class="category-list-item">
+      <li class="category-list-item card">
         @if (editingId() === category.id) {
           <app-category-form
             [category]="category"
@@ -30,7 +30,7 @@
             <p class="category-task-count">{{ taskCountFor(category.id) }} tareas</p>
             <div class="category-list-item-actions">
               <button type="button" (click)="onEdit(category.id)">Editar</button>
-              <button type="button" (click)="onDeleteRequested(category)">Eliminar</button>
+              <button type="button" class="btn-danger" (click)="onDeleteRequested(category)">Eliminar</button>
             </div>
           </div>
         }

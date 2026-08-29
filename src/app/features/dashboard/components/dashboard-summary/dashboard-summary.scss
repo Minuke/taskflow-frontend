@@ -1,13 +1,14 @@
 .dashboard-summary {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-  gap: 1rem;
+  gap: var(--space-4);
 }
 
 .summary-card {
-  padding: 1rem;
-  border-radius: 0.5rem;
-  border: 1px solid #e5e7eb;
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
   text-align: center;
 }
 
@@ -23,5 +24,5 @@
 
 .summary-label {
   font-size: 0.85rem;
-  color: #6b7280;
+  color: var(--color-text-muted);
 }

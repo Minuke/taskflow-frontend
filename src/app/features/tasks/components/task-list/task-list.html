@@ -78,7 +78,7 @@
 } @else {
 <ul class="task-list">
   @for (task of paginatedTasks(); track task.id) {
-  <li class="task-list-item" [class.task-list-item-overdue]="isOverdue(task.dueDate)"
+  <li class="task-list-item card" [class.task-list-item-overdue]="isOverdue(task.dueDate)"
     [class.task-list-item-completed]="task.completed"
     [class.task-list-item-high-priority]="task.priority === Priority.High">
     @if (editingId() === task.id) {
@@ -94,7 +94,7 @@
       }
       <div class="task-list-item-actions">
         <button type="button" (click)="onEdit(task.id)">Editar</button>
-        <button type="button" (click)="onDeleteRequested(task)">Eliminar</button>
+        <button type="button" class="btn-danger" (click)="onDeleteRequested(task)">Eliminar</button>
         <button type="button" (click)="onToggleComplete(task.id)">
           {{ task.completed ? 'Reabrir' : 'Completar' }}
         </button>
