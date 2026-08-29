@@ -2,6 +2,7 @@ import { Service, inject, signal, computed } from '@angular/core';
 import { AuthStore } from '@core/services/auth-store';
 import { Task } from '@core/models/task.model';
 import { Priority } from '@core/models/priority.enum';
+import { createLoadableState } from '@core/utils/loadable-state.util';
 
 export interface TaskInput {
   title: string;
@@ -20,6 +21,12 @@ export class TasksStore {
   private readonly tasks = signal<Task[]>([]);
   private nextId = 1;
 
+  private readonly loadable = createLoadableState(
+    'No se han podido cargar las tareas. Inténtalo de nuevo.',
+  );
+  readonly isLoading = this.loadable.isLoading;
+  readonly error = this.loadable.error;
+
   readonly userTasks = computed(() => {
     const userId = this.authStore.user()?.id;
     if (!userId) {
@@ -27,6 +34,10 @@ export class TasksStore {
     }
     return this.tasks().filter((task) => task.userId === userId);
   });
+
+  load(options?: { forceError?: boolean }): void {
+    this.loadable.load(options);
+  }
 
   create(input: TaskInput): void {
     const userId = this.authStore.user()?.id;
@@ -55,5 +66,15 @@ export class TasksStore {
 
   delete(id: number): void {
     this.tasks.update((list) => list.filter((task) => task.id !== id));
+  }
+
+  toggleComplete(id: number): void {
+    this.tasks.update((list) =>
+      list.map((task) =>
+        task.id === id
+          ? { ...task, completed: !task.completed, updatedAt: new Date().toISOString() }
+          : task,
+      ),
+    );
   }
 }

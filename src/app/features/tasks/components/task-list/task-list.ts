@@ -10,13 +10,14 @@ import { DueFilter } from '@core/models/due-filter.enum';
 import { isOverdue, isDueToday, isUpcoming } from '@core/utils/task-date.utils';
 import { priorityWeight } from '@core/utils/priority.utils';
 import { Pagination } from '@shared/components/pagination/pagination';
+import { SkeletonList } from '@shared/components/skeleton-list/skeleton-list';
 
 type TaskSortField = 'title' | 'priority' | 'dueDate' | 'createdAt' | 'updatedAt';
 type SortDirection = 'asc' | 'desc';
 
 @Component({
   selector: 'app-task-list',
-  imports: [TaskForm, ConfirmDialog, Pagination],
+  imports: [TaskForm, ConfirmDialog, Pagination, SkeletonList],
   templateUrl: './task-list.html',
   styleUrl: './task-list.scss',
 })
@@ -114,6 +115,8 @@ export class TaskList {
   });
 
   constructor() {
+    this.tasksStore.load();
+
     effect(() => {
       // Cualquier cambio en los criterios de filtrado/búsqueda/orden vuelve a la página 1.
       this.searchTerm();
@@ -125,6 +128,18 @@ export class TaskList {
       this.sortDirection();
       this.currentPage.set(1);
     });
+  }
+
+  protected onRetry(): void {
+   this.tasksStore.load();
+  }
+
+  protected onSimulateError(): void {
+    this.tasksStore.load({ forceError: true });
+  }
+
+  protected onToggleComplete(taskId: number): void {
+    this.tasksStore.toggleComplete(taskId);
   }
 
   protected isOverdue(dueDate: string | null): boolean {

@@ -4,7 +4,6 @@
     <input id="task-search" type="text" placeholder="Título o descripción..." [value]="searchTerm()"
       (input)="onSearchInput($event)" />
   </div>
-
   <div class="filter-group">
     <label for="task-status-filter">Estado</label>
     <select id="task-status-filter" [value]="statusFilter()" (change)="onStatusFilterChange($event)">
@@ -13,7 +12,6 @@
       <option [value]="TaskStatus.Completed">Completadas</option>
     </select>
   </div>
-
   <div class="filter-group">
     <label for="task-priority-filter">Prioridad</label>
     <select id="task-priority-filter" [value]="priorityFilter()" (change)="onPriorityFilterChange($event)">
@@ -23,7 +21,6 @@
       <option [value]="Priority.High">Alta</option>
     </select>
   </div>
-
   <div class="filter-group">
     <label for="task-category-filter">Categoría</label>
     <select id="task-category-filter" [value]="categoryFilter()" (change)="onCategoryFilterChange($event)">
@@ -44,7 +41,6 @@
       <option [value]="DueFilter.NoDate">Sin fecha</option>
     </select>
   </div>
-
   <div class="filter-group">
     <label for="task-sort-field">Ordenar por</label>
     <select id="task-sort-field" [value]="sortField()" (change)="onSortFieldChange($event)">
@@ -60,7 +56,18 @@
   </div>
 </div>
 
-@if (filteredTasks().length === 0) {
+<button type="button" class="dev-only" (click)="onSimulateError()">
+  Simular error de carga (demo)
+</button>
+
+@if (tasksStore.isLoading()) {
+<app-skeleton-list [rows]="5"></app-skeleton-list>
+} @else if (tasksStore.error(); as error) {
+<div class="error-state">
+  <p>{{ error }}</p>
+  <button type="button" (click)="onRetry()">Reintentar</button>
+</div>
+} @else if (filteredTasks().length === 0) {
 <p class="empty-state">
   @if (tasksStore.userTasks().length === 0) {
   Todavía no tienes tareas. Crea la primera con el formulario de arriba.
@@ -88,18 +95,21 @@
       <div class="task-list-item-actions">
         <button type="button" (click)="onEdit(task.id)">Editar</button>
         <button type="button" (click)="onDeleteRequested(task)">Eliminar</button>
+        <button type="button" (click)="onToggleComplete(task.id)">
+          {{ task.completed ? 'Reabrir' : 'Completar' }}
+        </button>
       </div>
     </div>
     }
   </li>
   }
 </ul>
-}
 
 @if (filteredTasks().length > 0) {
 <app-pagination [totalItems]="totalFilteredTasks()" [pageSize]="pageSize" [currentPage]="currentPage()"
   (pageChanged)="onPageChanged($event)">
 </app-pagination>
+}
 }
 
 @if (deletingTask(); as task) {

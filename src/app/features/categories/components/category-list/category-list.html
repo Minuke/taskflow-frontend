@@ -1,4 +1,15 @@
-@if (categoriesStore.userCategories().length === 0) {
+<button type="button" class="dev-only" (click)="onSimulateError()">
+  Simular error de carga (demo)
+</button>
+
+@if (categoriesStore.isLoading()) {
+  <app-skeleton-list [rows]="3"></app-skeleton-list>
+} @else if (categoriesStore.error(); as error) {
+  <div class="error-state">
+    <p>{{ error }}</p>
+    <button type="button" (click)="onRetry()">Reintentar</button>
+  </div>
+} @else if (categoriesStore.userCategories().length === 0) {
   <p class="empty-state">Todavía no tienes categorías. Crea la primera con el formulario de arriba.</p>
 } @else {
   <ul class="category-list">

@@ -1,6 +1,7 @@
 import { Service, inject, signal, computed } from '@angular/core';
 import { AuthStore } from '@core/services/auth-store';
 import { Category } from '@core/models/category.model';
+import { createLoadableState } from '@core/utils/loadable-state.util';
 
 @Service()
 export class CategoriesStore {
@@ -8,7 +9,12 @@ export class CategoriesStore {
   private readonly categories = signal<Category[]>([]);
   private nextId = 1;
 
-  // Aislamiento de datos: nunca se expone la lista completa, solo la del usuario autenticado.
+  private readonly loadable = createLoadableState(
+    'No se han podido cargar las categorías. Inténtalo de nuevo.',
+  );
+  readonly isLoading = this.loadable.isLoading;
+  readonly error = this.loadable.error;
+
   readonly userCategories = computed(() => {
     const userId = this.authStore.user()?.id;
     if (!userId) {
@@ -16,6 +22,10 @@ export class CategoriesStore {
     }
     return this.categories().filter((category) => category.userId === userId);
   });
+
+  load(options?: { forceError?: boolean }): void {
+    this.loadable.load(options);
+  }
 
   create(name: string, description: string | null): void {
     const userId = this.authStore.user()?.id;

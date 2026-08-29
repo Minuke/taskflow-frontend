@@ -1,13 +1,14 @@
 import { Component, inject, signal } from '@angular/core';
 import { CategoriesStore } from '@core/services/categories-store';
+import { TasksStore } from '@core/services/tasks-store';
 import { Category } from '@core/models/category.model';
 import { CategoryForm } from '@features/categories/components/category-form/category-form';
 import { ConfirmDialog } from '@shared/components/confirm-dialog/confirm-dialog';
-import { TasksStore } from '@core/services/tasks-store';
+import { SkeletonList } from '@shared/components/skeleton-list/skeleton-list';
 
 @Component({
   selector: 'app-category-list',
-  imports: [CategoryForm, ConfirmDialog],
+  imports: [CategoryForm, ConfirmDialog, SkeletonList],
   templateUrl: './category-list.html',
   styleUrl: './category-list.scss',
 })
@@ -18,7 +19,18 @@ export class CategoryList {
   protected readonly editingId = signal<number | null>(null);
   protected readonly deletingCategory = signal<Category | null>(null);
 
-  // Placeholder: el conteo real se conecta a TasksStore en A4, cuando exista.
+  constructor() {
+    this.categoriesStore.load();
+  }
+
+  protected onRetry(): void {
+    this.categoriesStore.load();
+  }
+
+  protected onSimulateError(): void {
+    this.categoriesStore.load({ forceError: true });
+  }
+
   protected taskCountFor(categoryId: number): number {
     return this.tasksStore.userTasks().filter((task) => task.categoryId === categoryId).length;
   }
