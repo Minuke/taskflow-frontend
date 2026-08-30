@@ -2,12 +2,13 @@ import { Component, inject, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TasksStore } from '@core/services/tasks-store';
 import { CategoriesStore } from '@core/services/categories-store';
+import { PriorityLabelPipe } from '@core/pipes/priority-label.pipe';
 
-const RECENT_LIMIT = 5;
+const RECENT_LIMIT = 4;
 
 @Component({
   selector: 'app-recent-tasks',
-  imports: [RouterLink],
+  imports: [RouterLink, PriorityLabelPipe],
   templateUrl: './recent-tasks.html',
   styleUrl: './recent-tasks.scss',
 })

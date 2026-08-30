@@ -4,19 +4,19 @@
     <span class="summary-label">Total</span>
   </div>
   <div class="summary-card">
-    <span class="summary-value">{{ pending() }}</span>
-    <span class="summary-label">Pendientes</span>
-  </div>
-  <div class="summary-card">
     <span class="summary-value">{{ completed() }}</span>
     <span class="summary-label">Completadas</span>
   </div>
   <div class="summary-card">
-    <span class="summary-value">{{ dueToday() }}</span>
-    <span class="summary-label">Vencen hoy</span>
+    <span class="summary-value">{{ pending() }}</span>
+    <span class="summary-label">Pendientes</span>
   </div>
   <div class="summary-card summary-card-warning">
-    <span class="summary-value">{{ priorityCount() }}</span>
+    <span class="summary-value">{{ highPriorityCount() }}</span>
     <span class="summary-label">Prioritarias</span>
+  </div>
+  <div class="summary-card">
+    <span class="summary-value">{{ dueToday() }}</span>
+    <span class="summary-label">Vencen hoy</span>
   </div>
 </div>

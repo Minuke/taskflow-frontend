@@ -3,12 +3,13 @@ import { RouterLink } from '@angular/router';
 import { TasksStore } from '@core/services/tasks-store';
 import { CategoriesStore } from '@core/services/categories-store';
 import { PriorityLabelPipe } from '@core/pipes/priority-label.pipe';
+import { FriendlyDatePipe } from '@core/pipes/friendly-date.pipe';
 
 const UPCOMING_LIMIT = 4;
 
 @Component({
   selector: 'app-upcoming-tasks',
-  imports: [RouterLink, PriorityLabelPipe],
+  imports: [RouterLink, PriorityLabelPipe, FriendlyDatePipe],
   templateUrl: './upcoming-tasks.html',
   styleUrl: './upcoming-tasks.scss',
 })

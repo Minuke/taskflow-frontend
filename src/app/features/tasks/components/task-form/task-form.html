@@ -41,7 +41,12 @@
 
     <div class="form-group">
       <label for="task-due-date">Fecha límite</label>
-      <input id="task-due-date" type="date" [formField]="taskForm.dueDate" />
+      <input id="task-due-date" type="date" [attr.min]="minDueDate" [formField]="taskForm.dueDate" />
+      @if (taskForm.dueDate().touched() && taskForm.dueDate().invalid()) {
+        @for (error of taskForm.dueDate().errors(); track error.kind) {
+          <p class="form-error">{{ error.message }}</p>
+        }
+      }
     </div>
 
     <div class="form-group">
@@ -54,16 +59,14 @@
       </select>
     </div>
 
-    <div class="form-group form-grid-full form-group-checkbox">
-      <label for="task-completed">
-        <input id="task-completed" type="checkbox" [formField]="taskForm.completed" />
-        Completada
-      </label>
-      <label for="task-is-priority">
-        <input id="task-is-priority" type="checkbox" [formField]="taskForm.isPriority" />
-        Marcar como prioritaria
-      </label>
-    </div>
+    @if (task()) {
+      <div class="form-group form-grid-full form-group-checkbox">
+        <label for="task-completed">
+          <input id="task-completed" type="checkbox" [formField]="taskForm.completed" />
+          Completada
+        </label>
+      </div>
+    }
 
     <div class="form-group form-grid-full">
       <label for="task-image">Imagen</label>

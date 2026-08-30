@@ -1,15 +1,15 @@
 import { Component, inject, input, output, signal, effect } from '@angular/core';
-import { form, FormField, required, minLength, maxLength, min, submit } from '@angular/forms/signals';
+import { form, FormField, required, minLength, maxLength, min, validate, submit } from '@angular/forms/signals';
 import { TasksStore, TaskInput } from '@core/services/tasks-store';
 import { CategoriesStore } from '@core/services/categories-store';
 import { Task } from '@core/models/task.model';
 import { Priority } from '@core/models/priority.enum';
+import { todayIsoDate } from '@core/utils/task-date.utils';
 
 interface TaskFormModel {
   title: string;
   description: string;
   priority: Priority;
-  isPriority: boolean;
   estimatedHours: number;
   completed: boolean;
   dueDate: string;
@@ -32,6 +32,7 @@ export class TaskForm {
   readonly cancelled = output<void>();
 
   protected readonly Priority = Priority;
+  protected readonly minDueDate = todayIsoDate();
 
   protected readonly model = signal<TaskFormModel>(this.emptyModel());
 
@@ -42,6 +43,14 @@ export class TaskForm {
     maxLength(schema.description, 500, { message: 'La descripción no puede superar los 500 caracteres.' });
     required(schema.estimatedHours, { message: 'Las horas estimadas son obligatorias.' });
     min(schema.estimatedHours, 0, { message: 'Las horas estimadas no pueden ser negativas.' });
+
+    validate(schema.dueDate, ({ value }) => {
+      const dueDate = value();
+      if (!dueDate || dueDate >= todayIsoDate()) {
+        return null;
+      }
+      return { kind: 'pastDueDate', message: 'La fecha límite no puede ser anterior a hoy.' };
+    });
   });
 
   constructor() {
@@ -78,7 +87,6 @@ export class TaskForm {
         title: value.title,
         description: value.description.trim() || null,
         priority: value.priority,
-        isPriority: value.isPriority,
         estimatedHours: value.estimatedHours,
         completed: value.completed,
         dueDate: value.dueDate || null,
@@ -104,7 +112,6 @@ export class TaskForm {
       title: '',
       description: '',
       priority: Priority.Medium,
-      isPriority: false,
       estimatedHours: 0,
       completed: false,
       dueDate: '',
@@ -118,7 +125,6 @@ export class TaskForm {
       title: task.title,
       description: task.description ?? '',
       priority: task.priority,
-      isPriority: task.isPriority,
       estimatedHours: task.estimatedHours,
       completed: task.completed,
       dueDate: task.dueDate ?? '',

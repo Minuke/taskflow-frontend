@@ -4,12 +4,12 @@
     <h2>{{ t.title }}</h2>
     <p class="detail-meta">
       {{ categoryName() }} · {{ t.priority | priorityLabel }} · {{ t.completed ? 'Completada' : 'Pendiente' }}
-      @if (t.isPriority) {
+      @if (t.priority === Priority.High) {
         · <span class="priority-badge">⭐ Prioritaria</span>
       }
     </p>
     @if (t.dueDate) {
-      <p>Fecha límite: {{ t.dueDate | date:'longDate' }}</p>
+      <p>Fecha límite: {{ t.dueDate | friendlyDate }}</p>
     }
     <p>Horas estimadas: {{ t.estimatedHours }}</p>
     @if (t.description) {
@@ -19,7 +19,7 @@
       <img [src]="image" alt="Imagen de la tarea" class="detail-image" />
     }
     <p class="detail-dates">
-      Creada: {{ t.createdAt | date:'medium' }} · Modificada: {{ t.updatedAt | date:'medium' }}
+      Creada: {{ t.createdAt | friendlyDate }} · Modificada: {{ t.updatedAt | friendlyDate }}
     </p>
   </div>
 } @else {

@@ -1,14 +1,13 @@
 import { Component, inject, input, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { DatePipe } from '@angular/common';
 import { CategoriesStore } from '@core/services/categories-store';
 import { TasksStore } from '@core/services/tasks-store';
 import { PriorityLabelPipe } from '@core/pipes/priority-label.pipe';
-
+import { FriendlyDatePipe } from '@core/pipes/friendly-date.pipe';
 
 @Component({
   selector: 'app-category-detail-page',
-  imports: [RouterLink, DatePipe, PriorityLabelPipe],
+  imports: [RouterLink, PriorityLabelPipe, FriendlyDatePipe],
   templateUrl: './category-detail-page.html',
   styleUrl: './category-detail-page.scss',
 })

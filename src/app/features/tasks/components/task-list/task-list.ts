@@ -5,20 +5,21 @@ import { CategoriesStore } from '@core/services/categories-store';
 import { ConfirmDialog } from '@shared/components/confirm-dialog/confirm-dialog';
 import { Pagination } from '@shared/components/pagination/pagination';
 import { SkeletonList } from '@shared/components/skeleton-list/skeleton-list';
+import { PriorityLabelPipe } from '@core/pipes/priority-label.pipe';
+import { FriendlyDatePipe } from '@core/pipes/friendly-date.pipe';
 import { Task } from '@core/models/task.model';
 import { Priority } from '@core/models/priority.enum';
 import { TaskStatus } from '@core/models/task-status.enum';
 import { DueFilter } from '@core/models/due-filter.enum';
 import { isOverdue, isDueToday, isUpcoming } from '@core/utils/task-date.utils';
 import { priorityWeight } from '@core/utils/priority.utils';
-import { PriorityLabelPipe } from '@core/pipes/priority-label.pipe';
 
 type TaskSortField = 'title' | 'priority' | 'dueDate' | 'createdAt' | 'updatedAt';
 type SortDirection = 'asc' | 'desc';
 
 @Component({
   selector: 'app-task-list',
-  imports: [RouterLink, ConfirmDialog, Pagination, SkeletonList, PriorityLabelPipe],
+  imports: [RouterLink, ConfirmDialog, Pagination, SkeletonList, PriorityLabelPipe, FriendlyDatePipe],
   templateUrl: './task-list.html',
   styleUrl: './task-list.scss',
 })
@@ -41,9 +42,23 @@ export class TaskList {
   protected readonly priorityFilter = signal<Priority | 'all'>('all');
   protected readonly categoryFilter = signal<number | 'all'>('all');
   protected readonly dueFilter = signal<DueFilter>(DueFilter.All);
-  protected readonly priorityOnlyFilter = signal(false);
   protected readonly sortField = signal<TaskSortField>('dueDate');
   protected readonly sortDirection = signal<SortDirection>('asc');
+
+  protected readonly isSearchActive = computed(() => this.searchTerm().trim().length > 0);
+  protected readonly isStatusActive = computed(() => this.statusFilter() !== TaskStatus.All);
+  protected readonly isPriorityActive = computed(() => this.priorityFilter() !== 'all');
+  protected readonly isCategoryActive = computed(() => this.categoryFilter() !== 'all');
+  protected readonly isDueActive = computed(() => this.dueFilter() !== DueFilter.All);
+
+  protected readonly hasActiveFilters = computed(
+    () =>
+      this.isSearchActive() ||
+      this.isStatusActive() ||
+      this.isPriorityActive() ||
+      this.isCategoryActive() ||
+      this.isDueActive(),
+  );
 
   protected readonly paginatedTasks = computed(() => {
     const tasks = this.filteredTasks();
@@ -90,15 +105,9 @@ export class TaskList {
     return categoryId === 'all' ? tasks : tasks.filter((task) => task.categoryId === categoryId);
   });
 
-  private readonly priorityOnlyFilteredTasks = computed(() => {
-    const onlyPriority = this.priorityOnlyFilter();
-    const tasks = this.categoryFilteredTasks();
-    return onlyPriority ? tasks.filter((task) => task.isPriority) : tasks;
-  });
-
   private readonly dueFilteredTasks = computed(() => {
     const due = this.dueFilter();
-    const tasks = this.priorityOnlyFilteredTasks();
+    const tasks = this.categoryFilteredTasks();
     switch (due) {
       case DueFilter.Overdue:
         return tasks.filter((task) => isOverdue(task.dueDate));
@@ -127,7 +136,6 @@ export class TaskList {
       this.priorityFilter();
       this.categoryFilter();
       this.dueFilter();
-      this.priorityOnlyFilter();
       this.sortField();
       this.sortDirection();
       this.currentPage.set(1);
@@ -178,16 +186,20 @@ export class TaskList {
     this.dueFilter.set((event.target as HTMLSelectElement).value as DueFilter);
   }
 
-  protected onPriorityOnlyFilterChange(event: Event): void {
-    this.priorityOnlyFilter.set((event.target as HTMLInputElement).checked);
-  }
-
   protected onSortFieldChange(event: Event): void {
     this.sortField.set((event.target as HTMLSelectElement).value as TaskSortField);
   }
 
   protected toggleSortDirection(): void {
     this.sortDirection.update((dir) => (dir === 'asc' ? 'desc' : 'asc'));
+  }
+
+  protected resetFilters(): void {
+    this.searchTerm.set('');
+    this.statusFilter.set(TaskStatus.All);
+    this.priorityFilter.set('all');
+    this.categoryFilter.set('all');
+    this.dueFilter.set(DueFilter.All);
   }
 
   protected onDeleteRequested(task: Task): void {

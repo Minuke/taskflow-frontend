@@ -7,7 +7,7 @@
     }
     <p class="detail-meta">{{ associatedTasks().length }} tareas asociadas</p>
     <p class="detail-dates">
-      Creada: {{ c.createdAt | date:'medium' }} · Modificada: {{ c.updatedAt | date:'medium' }}
+      Creada: {{ c.createdAt | friendlyDate }} · Modificada: {{ c.updatedAt | friendlyDate }}
     </p>
 
     @if (associatedTasks().length > 0) {

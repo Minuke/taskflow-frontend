@@ -3,6 +3,7 @@ import { RouterLink } from '@angular/router';
 import { TasksStore } from '@core/services/tasks-store';
 import { CategoriesStore } from '@core/services/categories-store';
 import { PriorityLabelPipe } from '@core/pipes/priority-label.pipe';
+import { Priority } from '@core/models/priority.enum';
 
 const PRIORITY_TASKS_LIMIT = 4;
 
@@ -19,7 +20,7 @@ export class PriorityTasks {
   protected readonly priorityTasks = computed(() =>
     this.tasksStore
       .userTasks()
-      .filter((task) => task.isPriority && !task.completed)
+      .filter((task) => task.priority === Priority.High && !task.completed)
       .slice(0, PRIORITY_TASKS_LIMIT),
   );
 

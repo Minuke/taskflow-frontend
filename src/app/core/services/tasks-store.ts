@@ -8,7 +8,6 @@ export interface TaskInput {
   title: string;
   description: string | null;
   priority: Priority;
-  isPriority: boolean;
   estimatedHours: number;
   completed: boolean;
   dueDate: string | null;

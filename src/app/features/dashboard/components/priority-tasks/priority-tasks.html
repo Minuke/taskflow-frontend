@@ -1,18 +1,19 @@
 <section class="dashboard-section">
   <h3>Tareas prioritarias</h3>
   @if (priorityTasks().length === 0) {
-    <p class="empty-state">No tienes tareas marcadas como prioritarias.</p>
+    <p class="empty-state">No tienes tareas de prioridad alta pendientes.</p>
   } @else {
     <ul class="dashboard-task-list">
       @for (task of priorityTasks(); track task.id) {
-        <li class="card card-compact">
-          <span class="dashboard-task-title">{{ task.title }}</span>
-          <span class="dashboard-task-meta">
-            {{ categoryNameFor(task.categoryId) }} · {{ task.priority | priorityLabel }}
-          </span>
+        <li>
+          <a class="task-mini-card card card-compact" [routerLink]="['/tasks', task.id]">
+            <span class="dashboard-task-title">{{ task.title }}</span>
+            <span class="dashboard-task-meta">
+              {{ categoryNameFor(task.categoryId) }} · {{ task.priority | priorityLabel }}
+            </span>
+          </a>
         </li>
       }
     </ul>
-    <a routerLink="/tasks">Ver todas las tareas</a>
   }
 </section>

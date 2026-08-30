@@ -1,6 +1,7 @@
 import { Component, inject, computed } from '@angular/core';
 import { TasksStore } from '@core/services/tasks-store';
 import { isDueToday } from '@core/utils/task-date.utils';
+import { Priority } from '@core/models/priority.enum';
 
 @Component({
   selector: 'app-dashboard-summary',
@@ -13,21 +14,21 @@ export class DashboardSummary {
 
   protected readonly total = computed(() => this.tasksStore.userTasks().length);
 
+  protected readonly completed = computed(
+    () => this.tasksStore.userTasks().filter((task) => task.completed).length,
+  );
+
   protected readonly pending = computed(
     () => this.tasksStore.userTasks().filter((task) => !task.completed).length,
   );
 
-  protected readonly completed = computed(
-    () => this.tasksStore.userTasks().filter((task) => task.completed).length,
+  protected readonly highPriorityCount = computed(
+    () => this.tasksStore.userTasks().filter((task) => task.priority === Priority.High).length,
   );
 
   protected readonly dueToday = computed(
     () =>
       this.tasksStore.userTasks().filter((task) => !task.completed && isDueToday(task.dueDate))
         .length,
-  );
-
-  protected readonly priorityCount = computed(
-    () => this.tasksStore.userTasks().filter((task) => !task.completed && task.isPriority).length,
   );
 }
