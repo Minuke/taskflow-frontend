@@ -9,6 +9,9 @@
   <app-dashboard-empty-state></app-dashboard-empty-state>
 } @else {
   <app-dashboard-summary></app-dashboard-summary>
-  <app-upcoming-tasks></app-upcoming-tasks>
-  <app-recent-tasks></app-recent-tasks>
+  <div class="dashboard-columns">
+    <app-upcoming-tasks></app-upcoming-tasks>
+    <app-priority-tasks></app-priority-tasks>
+    <app-recent-tasks></app-recent-tasks>
+  </div>
 }

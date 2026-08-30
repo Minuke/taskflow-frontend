@@ -1,26 +1,26 @@
-import { Component, inject, computed } from '@angular/core';
-import { ActivatedRoute, RouterLink } from '@angular/router';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { Component, inject, input, computed } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { DatePipe } from '@angular/common';
 import { CategoriesStore } from '@core/services/categories-store';
 import { TasksStore } from '@core/services/tasks-store';
+import { PriorityLabelPipe } from '@core/pipes/priority-label.pipe';
+
 
 @Component({
   selector: 'app-category-detail-page',
-  imports: [RouterLink],
+  imports: [RouterLink, DatePipe, PriorityLabelPipe],
   templateUrl: './category-detail-page.html',
   styleUrl: './category-detail-page.scss',
 })
 export class CategoryDetailPage {
-  private readonly route = inject(ActivatedRoute);
+  readonly id = input.required<string>();
+
   private readonly categoriesStore = inject(CategoriesStore);
   private readonly tasksStore = inject(TasksStore);
 
-  private readonly paramMap = toSignal(this.route.paramMap);
-  private readonly categoryId = computed(() => Number(this.paramMap()?.get('id')));
-
-  protected readonly category = computed(() => this.categoriesStore.categoryById(this.categoryId()));
+  protected readonly category = computed(() => this.categoriesStore.categoryById(Number(this.id())));
 
   protected readonly associatedTasks = computed(() =>
-    this.tasksStore.userTasks().filter((task) => task.categoryId === this.categoryId()),
+    this.tasksStore.userTasks().filter((task) => task.categoryId === Number(this.id())),
   );
 }

@@ -26,6 +26,12 @@ export const routes: Routes = [
       import('./features/tasks/pages/task-form-page/task-form-page').then((c) => c.TaskFormPage),
   },
   {
+    path: 'tasks/:id/edit',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/tasks/pages/task-edit-page/task-edit-page').then((c) => c.TaskEditPage),
+  },
+  {
     path: 'tasks/:id',
     canActivate: [authGuard],
     loadComponent: () =>
@@ -43,6 +49,14 @@ export const routes: Routes = [
     loadComponent: () =>
       import('./features/categories/pages/category-form-page/category-form-page').then(
         (c) => c.CategoryFormPage,
+      ),
+  },
+  {
+    path: 'categories/:id/edit',
+    canActivate: [authGuard],
+    loadComponent: () =>
+      import('./features/categories/pages/category-edit-page/category-edit-page').then(
+        (c) => c.CategoryEditPage,
       ),
   },
   {

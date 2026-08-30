@@ -9,6 +9,7 @@ interface TaskFormModel {
   title: string;
   description: string;
   priority: Priority;
+  isPriority: boolean;
   estimatedHours: number;
   completed: boolean;
   dueDate: string;
@@ -44,7 +45,6 @@ export class TaskForm {
   });
 
   constructor() {
-    // Sincroniza el modelo cuando cambia el input `task` (entrar/salir de modo edición).
     effect(() => {
       const current = this.task();
       this.model.set(current ? this.modelFromTask(current) : this.emptyModel());
@@ -78,6 +78,7 @@ export class TaskForm {
         title: value.title,
         description: value.description.trim() || null,
         priority: value.priority,
+        isPriority: value.isPriority,
         estimatedHours: value.estimatedHours,
         completed: value.completed,
         dueDate: value.dueDate || null,
@@ -103,6 +104,7 @@ export class TaskForm {
       title: '',
       description: '',
       priority: Priority.Medium,
+      isPriority: false,
       estimatedHours: 0,
       completed: false,
       dueDate: '',
@@ -116,6 +118,7 @@ export class TaskForm {
       title: task.title,
       description: task.description ?? '',
       priority: task.priority,
+      isPriority: task.isPriority,
       estimatedHours: task.estimatedHours,
       completed: task.completed,
       dueDate: task.dueDate ?? '',

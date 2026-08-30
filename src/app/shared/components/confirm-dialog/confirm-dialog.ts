@@ -8,7 +8,6 @@ import { Component, input, output } from '@angular/core';
 })
 export class ConfirmDialog {
   readonly title = input<string>();
-  readonly message = input.required<string>();
 
   readonly confirmed = output<void>();
   readonly cancelled = output<void>();

@@ -2,23 +2,23 @@ import { Component, inject, signal, computed, effect } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TasksStore } from '@core/services/tasks-store';
 import { CategoriesStore } from '@core/services/categories-store';
-import { TaskForm } from '@features/tasks/components/task-form/task-form';
 import { ConfirmDialog } from '@shared/components/confirm-dialog/confirm-dialog';
+import { Pagination } from '@shared/components/pagination/pagination';
+import { SkeletonList } from '@shared/components/skeleton-list/skeleton-list';
 import { Task } from '@core/models/task.model';
 import { Priority } from '@core/models/priority.enum';
 import { TaskStatus } from '@core/models/task-status.enum';
 import { DueFilter } from '@core/models/due-filter.enum';
 import { isOverdue, isDueToday, isUpcoming } from '@core/utils/task-date.utils';
 import { priorityWeight } from '@core/utils/priority.utils';
-import { Pagination } from '@shared/components/pagination/pagination';
-import { SkeletonList } from '@shared/components/skeleton-list/skeleton-list';
+import { PriorityLabelPipe } from '@core/pipes/priority-label.pipe';
 
 type TaskSortField = 'title' | 'priority' | 'dueDate' | 'createdAt' | 'updatedAt';
 type SortDirection = 'asc' | 'desc';
 
 @Component({
   selector: 'app-task-list',
-  imports: [RouterLink, TaskForm, ConfirmDialog, Pagination, SkeletonList],
+  imports: [RouterLink, ConfirmDialog, Pagination, SkeletonList, PriorityLabelPipe],
   templateUrl: './task-list.html',
   styleUrl: './task-list.scss',
 })
@@ -33,7 +33,6 @@ export class TaskList {
   protected readonly DueFilter = DueFilter;
   protected readonly pageSize = TaskList.PAGE_SIZE;
 
-  protected readonly editingId = signal<number | null>(null);
   protected readonly deletingTask = signal<Task | null>(null);
   protected readonly currentPage = signal(1);
 
@@ -42,6 +41,7 @@ export class TaskList {
   protected readonly priorityFilter = signal<Priority | 'all'>('all');
   protected readonly categoryFilter = signal<number | 'all'>('all');
   protected readonly dueFilter = signal<DueFilter>(DueFilter.All);
+  protected readonly priorityOnlyFilter = signal(false);
   protected readonly sortField = signal<TaskSortField>('dueDate');
   protected readonly sortDirection = signal<SortDirection>('asc');
 
@@ -90,9 +90,15 @@ export class TaskList {
     return categoryId === 'all' ? tasks : tasks.filter((task) => task.categoryId === categoryId);
   });
 
+  private readonly priorityOnlyFilteredTasks = computed(() => {
+    const onlyPriority = this.priorityOnlyFilter();
+    const tasks = this.categoryFilteredTasks();
+    return onlyPriority ? tasks.filter((task) => task.isPriority) : tasks;
+  });
+
   private readonly dueFilteredTasks = computed(() => {
     const due = this.dueFilter();
-    const tasks = this.categoryFilteredTasks();
+    const tasks = this.priorityOnlyFilteredTasks();
     switch (due) {
       case DueFilter.Overdue:
         return tasks.filter((task) => isOverdue(task.dueDate));
@@ -121,6 +127,7 @@ export class TaskList {
       this.priorityFilter();
       this.categoryFilter();
       this.dueFilter();
+      this.priorityOnlyFilter();
       this.sortField();
       this.sortDirection();
       this.currentPage.set(1);
@@ -171,24 +178,16 @@ export class TaskList {
     this.dueFilter.set((event.target as HTMLSelectElement).value as DueFilter);
   }
 
+  protected onPriorityOnlyFilterChange(event: Event): void {
+    this.priorityOnlyFilter.set((event.target as HTMLInputElement).checked);
+  }
+
   protected onSortFieldChange(event: Event): void {
     this.sortField.set((event.target as HTMLSelectElement).value as TaskSortField);
   }
 
   protected toggleSortDirection(): void {
     this.sortDirection.update((dir) => (dir === 'asc' ? 'desc' : 'asc'));
-  }
-
-  protected onEdit(taskId: number): void {
-    this.editingId.set(taskId);
-  }
-
-  protected onEditCancelled(): void {
-    this.editingId.set(null);
-  }
-
-  protected onEditSaved(): void {
-    this.editingId.set(null);
   }
 
   protected onDeleteRequested(task: Task): void {

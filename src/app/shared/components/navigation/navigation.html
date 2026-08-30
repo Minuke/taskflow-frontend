@@ -17,7 +17,13 @@
     <a routerLink="/dashboard" routerLinkActive="navbar-link-active" (click)="closeMenu()">Dashboard</a>
     <a routerLink="/tasks" routerLinkActive="navbar-link-active" (click)="closeMenu()">Tareas</a>
     <a routerLink="/categories" routerLinkActive="navbar-link-active" (click)="closeMenu()">Categorías</a>
-    <button type="button" (click)="onLogout()">Cerrar sesión</button>
+    <button type="button" (click)="onLogoutRequested()">Cerrar sesión</button>
   </div>
 </nav>
+
+@if (showLogoutConfirm()) {
+  <app-confirm-dialog title="Cerrar sesión" (confirmed)="onLogoutConfirmed()" (cancelled)="onLogoutCancelled()">
+    ¿Seguro que quieres cerrar sesión?
+  </app-confirm-dialog>
+}
 }

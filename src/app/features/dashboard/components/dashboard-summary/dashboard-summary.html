@@ -11,12 +11,12 @@
     <span class="summary-value">{{ completed() }}</span>
     <span class="summary-label">Completadas</span>
   </div>
-  <div class="summary-card summary-card-danger">
-    <span class="summary-value">{{ overdue() }}</span>
-    <span class="summary-label">Vencidas</span>
-  </div>
   <div class="summary-card">
     <span class="summary-value">{{ dueToday() }}</span>
     <span class="summary-label">Vencen hoy</span>
+  </div>
+  <div class="summary-card summary-card-warning">
+    <span class="summary-value">{{ priorityCount() }}</span>
+    <span class="summary-label">Prioritarias</span>
   </div>
 </div>

@@ -11,26 +11,22 @@
   <ul class="category-list">
     @for (category of categoriesStore.userCategories(); track category.id) {
       <li class="category-list-item card card-compact">
-        @if (editingId() === category.id) {
-          <app-category-form [category]="category" (saved)="onEditSaved()" (cancelled)="onEditCancelled()"></app-category-form>
-        } @else {
-          <div class="category-list-item-content">
-            <h4>{{ category.name }}</h4>
-            <p class="category-task-count">{{ taskCountFor(category.id) }} tareas</p>
-            <div class="category-list-item-actions">
-              <a [routerLink]="['/categories', category.id]">Ver</a>
-              <button type="button" (click)="onEdit(category.id)">Editar</button>
-              <button type="button" class="btn-danger" (click)="onDeleteRequested(category)">Eliminar</button>
-            </div>
-          </div>
-        }
+        <div class="category-list-item-content">
+          <h4>{{ category.name }}</h4>
+          <p class="category-task-count">{{ taskCountFor(category.id) }} tareas</p>
+        </div>
+        <div class="category-list-item-actions">
+          <a class="btn" [routerLink]="['/categories', category.id]">Ver</a>
+          <a class="btn" [routerLink]="['/categories', category.id, 'edit']">Editar</a>
+          <button type="button" class="btn-danger" (click)="onDeleteRequested(category)">Eliminar</button>
+        </div>
       </li>
     }
   </ul>
 }
 
 @if (deletingCategory(); as category) {
-  <app-confirm-dialog title="Eliminar categoría"
-    [message]="'¿Seguro que quieres eliminar la categoría ' + category.name + '? Las tareas asociadas se quedarán sin categoría.'"
-    (confirmed)="onDeleteConfirmed(category.id)" (cancelled)="onDeleteCancelled()"></app-confirm-dialog>
+  <app-confirm-dialog title="Eliminar categoría" (confirmed)="onDeleteConfirmed(category.id)" (cancelled)="onDeleteCancelled()">
+    ¿Seguro que quieres eliminar la categoría <strong>{{ category.name }}</strong>? Las tareas asociadas se quedarán sin categoría.
+  </app-confirm-dialog>
 }

@@ -1,5 +1,6 @@
 .detail-page {
   max-width: 40rem;
+  margin: var(--space-6) auto 0;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
@@ -20,4 +21,16 @@
   max-width: 100%;
   border-radius: var(--radius-md);
   margin: var(--space-2) 0;
+}
+
+.task-mini-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  color: var(--color-text);
+}
+
+.task-mini-card:hover {
+  border-color: var(--color-primary);
+  text-decoration: none;
 }

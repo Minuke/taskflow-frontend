@@ -1,14 +1,14 @@
 <section class="dashboard-section">
-  <h3>Próximas tareas</h3>
-  @if (upcomingTasks().length === 0) {
-    <p class="empty-state">No tienes tareas pendientes con fecha límite próxima.</p>
+  <h3>Tareas prioritarias</h3>
+  @if (priorityTasks().length === 0) {
+    <p class="empty-state">No tienes tareas marcadas como prioritarias.</p>
   } @else {
     <ul class="dashboard-task-list">
-      @for (task of upcomingTasks(); track task.id) {
+      @for (task of priorityTasks(); track task.id) {
         <li class="card card-compact">
           <span class="dashboard-task-title">{{ task.title }}</span>
           <span class="dashboard-task-meta">
-            {{ categoryNameFor(task.categoryId) }} · {{ task.priority | priorityLabel }} · {{ task.dueDate }}
+            {{ categoryNameFor(task.categoryId) }} · {{ task.priority | priorityLabel }}
           </span>
         </li>
       }

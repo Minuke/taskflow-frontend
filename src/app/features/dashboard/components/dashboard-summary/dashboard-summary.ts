@@ -1,6 +1,6 @@
 import { Component, inject, computed } from '@angular/core';
 import { TasksStore } from '@core/services/tasks-store';
-import { isOverdue, isDueToday } from '@core/utils/task-date.utils';
+import { isDueToday } from '@core/utils/task-date.utils';
 
 @Component({
   selector: 'app-dashboard-summary',
@@ -21,15 +21,13 @@ export class DashboardSummary {
     () => this.tasksStore.userTasks().filter((task) => task.completed).length,
   );
 
-  protected readonly overdue = computed(
-    () =>
-      this.tasksStore.userTasks().filter((task) => !task.completed && isOverdue(task.dueDate))
-        .length,
-  );
-
   protected readonly dueToday = computed(
     () =>
       this.tasksStore.userTasks().filter((task) => !task.completed && isDueToday(task.dueDate))
         .length,
+  );
+
+  protected readonly priorityCount = computed(
+    () => this.tasksStore.userTasks().filter((task) => !task.completed && task.isPriority).length,
   );
 }

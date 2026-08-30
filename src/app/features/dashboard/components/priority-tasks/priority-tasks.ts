@@ -1,26 +1,29 @@
-import { Component, inject, input, computed } from '@angular/core';
+import { Component, inject, computed } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { DatePipe } from '@angular/common';
 import { TasksStore } from '@core/services/tasks-store';
 import { CategoriesStore } from '@core/services/categories-store';
 import { PriorityLabelPipe } from '@core/pipes/priority-label.pipe';
 
-@Component({
-  selector: 'app-task-detail-page',
-  imports: [RouterLink, DatePipe, PriorityLabelPipe],
-  templateUrl: './task-detail-page.html',
-  styleUrl: './task-detail-page.scss',
-})
-export class TaskDetailPage {
-  readonly id = input.required<string>();
+const PRIORITY_TASKS_LIMIT = 4;
 
+@Component({
+  selector: 'app-priority-tasks',
+  imports: [RouterLink, PriorityLabelPipe],
+  templateUrl: './priority-tasks.html',
+  styleUrl: './priority-tasks.scss',
+})
+export class PriorityTasks {
   private readonly tasksStore = inject(TasksStore);
   private readonly categoriesStore = inject(CategoriesStore);
 
-  protected readonly task = computed(() => this.tasksStore.taskById(Number(this.id())));
+  protected readonly priorityTasks = computed(() =>
+    this.tasksStore
+      .userTasks()
+      .filter((task) => task.isPriority && !task.completed)
+      .slice(0, PRIORITY_TASKS_LIMIT),
+  );
 
-  protected readonly categoryName = computed(() => {
-    const categoryId = this.task()?.categoryId ?? null;
+  protected categoryNameFor(categoryId: number | null): string {
     if (!categoryId) {
       return 'Sin categoría';
     }
@@ -28,5 +31,5 @@ export class TaskDetailPage {
       this.categoriesStore.userCategories().find((c) => c.id === categoryId)?.name ??
       'Sin categoría'
     );
-  });
+  }
 }

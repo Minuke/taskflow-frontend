@@ -1,6 +1,35 @@
 @use 'abstracts/breakpoints' as *;
 
-.task-list,
+// Tareas: una por fila, contenido a la izquierda y acciones a la derecha en pantallas medianas+
+.task-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.task-list-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+
+  @include breakpoint-up($breakpoint-md) {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+  }
+}
+
+.task-list-item-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+
+  @include breakpoint-up($breakpoint-md) {
+    flex-shrink: 0;
+  }
+}
+
+// Categorías: mantienen el grid responsive, tienen menos información por card
 .category-list {
   display: grid;
   grid-template-columns: 1fr;
@@ -13,6 +42,13 @@
   @include breakpoint-up($breakpoint-lg) {
     grid-template-columns: repeat(3, 1fr);
   }
+}
+
+.category-list-item-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
 }
 
 .task-list-item-content,
@@ -31,12 +67,4 @@
 .category-list-item-content p {
   font-size: 0.85rem;
   color: var(--color-text-muted);
-}
-
-.task-list-item-actions,
-.category-list-item-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-  margin-top: var(--space-2);
 }

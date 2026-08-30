@@ -1,0 +1,13 @@
+@use 'abstracts/breakpoints' as *;
+
+.dashboard-columns {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-4);
+  margin-top: var(--space-4);
+
+  @include breakpoint-up($breakpoint-lg) {
+    grid-template-columns: repeat(3, 1fr);
+    align-items: start;
+  }
+}

@@ -1,18 +1,25 @@
 @if (category(); as c) {
   <div class="detail-page card">
-    <a routerLink="/categories">← Volver a categorías</a>
+    <a routerLink="/categories" class="form-panel-back">← Volver a categorías</a>
     <h2>{{ c.name }}</h2>
     @if (c.description) {
       <p>{{ c.description }}</p>
     }
     <p class="detail-meta">{{ associatedTasks().length }} tareas asociadas</p>
-    <p class="detail-dates">Creada: {{ c.createdAt }} · Modificada: {{ c.updatedAt }}</p>
+    <p class="detail-dates">
+      Creada: {{ c.createdAt | date:'medium' }} · Modificada: {{ c.updatedAt | date:'medium' }}
+    </p>
 
     @if (associatedTasks().length > 0) {
       <ul class="task-list">
         @for (task of associatedTasks(); track task.id) {
-          <li class="task-list-item card card-compact">
-            <a [routerLink]="['/tasks', task.id]">{{ task.title }}</a>
+          <li>
+            <a class="task-mini-card card card-compact" [routerLink]="['/tasks', task.id]">
+              <span class="dashboard-task-title">{{ task.title }}</span>
+              <span class="dashboard-task-meta">
+                {{ task.priority | priorityLabel }} · {{ task.completed ? 'Completada' : 'Pendiente' }}
+              </span>
+            </a>
           </li>
         }
       </ul>

@@ -1,3 +1,20 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-2) var(--space-4);
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+  cursor: pointer;
+}
+
+.btn:hover {
+  border-color: var(--color-primary);
+  text-decoration: none;
+}
+
 .btn-primary {
   display: inline-block;
   padding: var(--space-2) var(--space-4);
@@ -10,6 +27,7 @@
 
 .btn-primary:hover {
   background: var(--color-primary-dark);
+  text-decoration: none;
 }
 
 .btn-danger {

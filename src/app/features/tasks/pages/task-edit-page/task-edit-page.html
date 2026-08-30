@@ -1,0 +1,9 @@
+@if (task(); as t) {
+  <div class="form-panel card">
+    <a routerLink="/tasks" class="form-panel-back">← Volver a tareas</a>
+    <h2>Editar tarea</h2>
+    <app-task-form [task]="t" (saved)="onSaved()" (cancelled)="onCancelled()"></app-task-form>
+  </div>
+} @else {
+  <p class="empty-state">Esta tarea no existe o no tienes acceso a ella.</p>
+}

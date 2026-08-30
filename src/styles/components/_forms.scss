@@ -1,3 +1,5 @@
+@use 'abstracts/breakpoints' as *;
+
 .form-group {
   display: flex;
   flex-direction: column;
@@ -31,10 +33,54 @@
 .form-group-checkbox {
   flex-direction: row;
   align-items: center;
+  gap: var(--space-4);
+}
+
+.form-group-checkbox label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 400;
 }
 
 .form-error {
   color: var(--color-danger);
   font-size: 0.85rem;
   margin: 0;
+}
+
+// Grid compacto de 2 columnas para formularios largos (Punto 11)
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0 var(--space-4);
+
+  @include breakpoint-up($breakpoint-sm) {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.form-grid-full {
+  grid-column: 1 / -1;
+}
+
+// Panel centrado reutilizado por creación y edición de tareas/categorías (Punto 11)
+.form-panel {
+  max-width: 36rem;
+  margin: var(--space-6) auto 0;
+}
+
+.form-panel-back {
+  display: inline-block;
+  margin-bottom: var(--space-3);
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+// Espaciado entre botones de acciones de formulario — antes no existía, por eso se veían pegados (Puntos 2, 3, 10)
+.task-form-actions,
+.category-form-actions {
+  display: flex;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
 }
