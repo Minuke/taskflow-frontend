@@ -1,5 +1,5 @@
-import { Component, inject, input, output, signal, effect } from '@angular/core';
-import { form, FormField, required, minLength, maxLength, min, validate, submit } from '@angular/forms/signals';
+import { Component, inject, input, output, signal, effect, computed } from '@angular/core';
+import { form, FormField, required, minLength, maxLength, min, validate, submit, disabled } from '@angular/forms/signals';
 import { TasksStore, TaskInput } from '@core/services/tasks-store';
 import { CategoriesStore } from '@core/services/categories-store';
 import { Task } from '@core/models/task.model';
@@ -28,11 +28,14 @@ export class TaskForm {
   protected readonly categoriesStore = inject(CategoriesStore);
 
   readonly task = input<Task | null>(null);
+  readonly presetCategoryId = input<string | null>(null);
   readonly saved = output<void>();
   readonly cancelled = output<void>();
 
   protected readonly Priority = Priority;
   protected readonly minDueDate = todayIsoDate();
+
+  protected readonly isCategoryLocked = computed(() => !this.task() && this.presetCategoryId() !== null);
 
   protected readonly model = signal<TaskFormModel>(this.emptyModel());
 
@@ -43,6 +46,10 @@ export class TaskForm {
     maxLength(schema.description, 500, { message: 'La descripción no puede superar los 500 caracteres.' });
     required(schema.estimatedHours, { message: 'Las horas estimadas son obligatorias.' });
     min(schema.estimatedHours, 0, { message: 'Las horas estimadas no pueden ser negativas.' });
+      
+    disabled(schema.categoryId, {
+      when: () => this.isCategoryLocked(),
+    });
 
     validate(schema.dueDate, ({ value }) => {
       const dueDate = value();
@@ -56,7 +63,13 @@ export class TaskForm {
   constructor() {
     effect(() => {
       const current = this.task();
-      this.model.set(current ? this.modelFromTask(current) : this.emptyModel());
+      const preset = this.presetCategoryId();
+
+      if (current) {
+        this.model.set(this.modelFromTask(current));
+      } else {
+        this.model.set({ ...this.emptyModel(), categoryId: preset ?? '' });
+      }
     });
   }
 

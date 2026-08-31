@@ -1,10 +1,10 @@
 <div class="task-filters-bar card">
-  <div class="filter-group" [class.filter-group-active]="statusFilter() !== TaskStatus.Pending">
+  <div class="filter-group" [class.filter-group-active]="statusFilter() !== 'all'">
     <label for="task-status-filter">Estado</label>
     <select id="task-status-filter" [value]="statusFilter()" (change)="onStatusChange($event)">
-      <option [value]="TaskStatus.All">Todas</option>
-      <option [value]="TaskStatus.Pending">Pendientes</option>
-      <option [value]="TaskStatus.Completed">Completadas</option>
+      <option value="all">Todas</option>
+      <option value="pending">Pendientes</option>
+      <option value="completed">Completadas</option>
     </select>
   </div>
 
@@ -12,9 +12,9 @@
     <label for="task-priority-filter">Prioridad</label>
     <select id="task-priority-filter" [value]="priorityFilter()" (change)="onPriorityChange($event)">
       <option value="all">Todas</option>
-      <option [value]="Priority.Low">Baja</option>
-      <option [value]="Priority.Medium">Media</option>
-      <option [value]="Priority.High">Alta</option>
+      <option value="low">Baja</option>
+      <option value="medium">Media</option>
+      <option value="high">Alta</option>
     </select>
   </div>
 
@@ -28,14 +28,14 @@
     </select>
   </div>
 
-  <div class="filter-group" [class.filter-group-active]="dueFilter() !== DueFilter.All">
+  <div class="filter-group" [class.filter-group-active]="dueFilter() !== 'all'">
     <label for="task-due-filter">Fecha</label>
     <select id="task-due-filter" [value]="dueFilter()" (change)="onDueChange($event)">
-      <option [value]="DueFilter.All">Todas</option>
-      <option [value]="DueFilter.Overdue">Vencidas</option>
-      <option [value]="DueFilter.Today">Hoy</option>
-      <option [value]="DueFilter.Upcoming">Próximas</option>
-      <option [value]="DueFilter.NoDate">Sin fecha</option>
+      <option value="all">Todas</option>
+      <option value="overdue">Vencidas</option>
+      <option value="today">Hoy</option>
+      <option value="upcoming">Próximas</option>
+      <option value="noDate">Sin fecha</option>
     </select>
   </div>
 

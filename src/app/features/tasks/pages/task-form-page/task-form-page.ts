@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, input } from '@angular/core';
 import { TaskCreatePanel } from '@features/tasks/components/task-create-panel/task-create-panel';
 
 @Component({
@@ -7,4 +7,6 @@ import { TaskCreatePanel } from '@features/tasks/components/task-create-panel/ta
   templateUrl: './task-form-page.html',
   styleUrl: './task-form-page.scss',
 })
-export class TaskFormPage {}
+export class TaskFormPage {
+  readonly categoryId = input<string>();
+}

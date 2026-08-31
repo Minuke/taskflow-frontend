@@ -1,25 +1,18 @@
-@use 'abstracts/breakpoints' as *;
-
 .task-filters-bar {
-  display: grid;
-  grid-template-columns: 1fr;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
   gap: var(--space-3);
+  padding: var(--space-3);
   margin-bottom: var(--space-4);
-
-  @include breakpoint-up($breakpoint-sm) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @include breakpoint-up($breakpoint-lg) {
-    grid-template-columns: repeat(4, 1fr);
-    align-items: end;
-  }
 }
 
 .filter-group {
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
+  flex: 1 1 130px;
+  min-width: 110px;
   padding: var(--space-1) var(--space-2);
   border-radius: var(--radius-sm);
   border: 1px solid transparent;
@@ -57,9 +50,6 @@
 }
 
 .filter-group-reset {
-  justify-content: flex-end;
-
-  @include breakpoint-up($breakpoint-lg) {
-    grid-column: -1;
-  }
+  flex: 0 0 auto;
+  margin-left: auto;
 }

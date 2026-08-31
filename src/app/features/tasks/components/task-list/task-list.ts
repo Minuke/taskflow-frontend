@@ -1,20 +1,17 @@
 import { Component, inject, signal, computed, effect } from '@angular/core';
 import { TasksStore } from '@core/services/tasks-store';
 import { CategoriesStore } from '@core/services/categories-store';
+import { TaskFiltersStore } from '@core/services/task-filters-store';
 import { ConfirmDialog } from '@shared/components/confirm-dialog/confirm-dialog';
 import { SkeletonList } from '@shared/components/skeleton-list/skeleton-list';
-import {
-  TaskFiltersPanel,
-  TaskSortField,
-  SortDirection,
-} from '@features/tasks/components/task-filters-panel/task-filters-panel';
+import { TaskFiltersPanel } from '@features/tasks/components/task-filters-panel/task-filters-panel';
 import { TaskResultsList } from '@features/tasks/components/task-results-list/task-results-list';
 import { Task } from '@core/models/task.model';
-import { Priority } from '@core/models/priority.enum';
 import { TaskStatus } from '@core/models/task-status.enum';
 import { DueFilter } from '@core/models/due-filter.enum';
 import { isOverdue, isDueToday, isUpcoming } from '@core/utils/task-date.utils';
 import { priorityWeight } from '@core/utils/priority.utils';
+import { TaskSortField } from '@core/services/task-filters-store';
 
 const PAGE_SIZE = 10;
 
@@ -27,27 +24,20 @@ const PAGE_SIZE = 10;
 export class TaskList {
   protected readonly tasksStore = inject(TasksStore);
   protected readonly categoriesStore = inject(CategoriesStore);
+  protected readonly filtersStore = inject(TaskFiltersStore);
 
   protected readonly pageSize = PAGE_SIZE;
 
   protected readonly deletingTask = signal<Task | null>(null);
   protected readonly currentPage = signal(1);
 
-  protected readonly searchTerm = signal('');
-  protected readonly statusFilter = signal<TaskStatus>(TaskStatus.Pending);
-  protected readonly priorityFilter = signal<Priority | 'all'>('all');
-  protected readonly categoryFilter = signal<number | 'all'>('all');
-  protected readonly dueFilter = signal<DueFilter>(DueFilter.All);
-  protected readonly sortField = signal<TaskSortField>('updatedAt');
-  protected readonly sortDirection = signal<SortDirection>('desc');
-
   protected readonly hasActiveFilters = computed(
     () =>
-      this.searchTerm().trim().length > 0 ||
-      this.statusFilter() !== TaskStatus.Pending ||
-      this.priorityFilter() !== 'all' ||
-      this.categoryFilter() !== 'all' ||
-      this.dueFilter() !== DueFilter.All,
+      this.filtersStore.searchTerm().trim().length > 0 ||
+      this.filtersStore.statusFilter() !== TaskStatus.All ||
+      this.filtersStore.priorityFilter() !== 'all' ||
+      this.filtersStore.categoryFilter() !== 'all' ||
+      this.filtersStore.dueFilter() !== DueFilter.All,
   );
 
   protected readonly paginatedTasks = computed(() => {
@@ -59,7 +49,7 @@ export class TaskList {
   protected readonly totalFilteredTasks = computed(() => this.filteredTasks().length);
 
   private readonly searchedTasks = computed(() => {
-    const term = this.searchTerm().trim().toLowerCase();
+    const term = this.filtersStore.searchTerm().trim().toLowerCase();
     const tasks = this.tasksStore.userTasks();
     if (!term) {
       return tasks;
@@ -72,7 +62,7 @@ export class TaskList {
   });
 
   private readonly statusFilteredTasks = computed(() => {
-    const status = this.statusFilter();
+    const status = this.filtersStore.statusFilter();
     const tasks = this.searchedTasks();
     if (status === TaskStatus.Pending) {
       return tasks.filter((task) => !task.completed);
@@ -84,19 +74,19 @@ export class TaskList {
   });
 
   private readonly priorityFilteredTasks = computed(() => {
-    const priority = this.priorityFilter();
+    const priority = this.filtersStore.priorityFilter();
     const tasks = this.statusFilteredTasks();
     return priority === 'all' ? tasks : tasks.filter((task) => task.priority === priority);
   });
 
   private readonly categoryFilteredTasks = computed(() => {
-    const categoryId = this.categoryFilter();
+    const categoryId = this.filtersStore.categoryFilter();
     const tasks = this.priorityFilteredTasks();
     return categoryId === 'all' ? tasks : tasks.filter((task) => task.categoryId === categoryId);
   });
 
   private readonly dueFilteredTasks = computed(() => {
-    const due = this.dueFilter();
+    const due = this.filtersStore.dueFilter();
     const tasks = this.categoryFilteredTasks();
     switch (due) {
       case DueFilter.Overdue:
@@ -121,13 +111,13 @@ export class TaskList {
     this.tasksStore.load();
 
     effect(() => {
-      this.searchTerm();
-      this.statusFilter();
-      this.priorityFilter();
-      this.categoryFilter();
-      this.dueFilter();
-      this.sortField();
-      this.sortDirection();
+      this.filtersStore.searchTerm();
+      this.filtersStore.statusFilter();
+      this.filtersStore.priorityFilter();
+      this.filtersStore.categoryFilter();
+      this.filtersStore.dueFilter();
+      this.filtersStore.sortField();
+      this.filtersStore.sortDirection();
       this.currentPage.set(1);
     });
   }
@@ -141,13 +131,7 @@ export class TaskList {
   }
 
   protected resetFilters(): void {
-    this.searchTerm.set('');
-    this.statusFilter.set(TaskStatus.Pending);
-    this.priorityFilter.set('all');
-    this.categoryFilter.set('all');
-    this.dueFilter.set(DueFilter.All);
-    this.sortField.set('updatedAt');
-    this.sortDirection.set('desc');
+    this.filtersStore.reset();
   }
 
   protected onDeleteRequested(task: Task): void {
@@ -168,8 +152,8 @@ export class TaskList {
   }
 
   private sortTasks(tasks: Task[]): Task[] {
-    const field = this.sortField();
-    const direction = this.sortDirection();
+    const field = this.filtersStore.sortField();
+    const direction = this.filtersStore.sortDirection();
     const factor = direction === 'asc' ? 1 : -1;
 
     return tasks.sort((a, b) => {
@@ -177,7 +161,6 @@ export class TaskList {
       if (primary !== 0) {
         return primary;
       }
-      // Desempate: siempre por prioridad, de Alta a Baja, independientemente del criterio principal.
       return priorityWeight(b.priority) - priorityWeight(a.priority);
     });
   }

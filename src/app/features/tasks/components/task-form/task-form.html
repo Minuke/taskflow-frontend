@@ -57,6 +57,9 @@
           <option [value]="category.id">{{ category.name }}</option>
         }
       </select>
+      @if (isCategoryLocked()) {
+        <p class="filter-group label">Categoría preseleccionada desde la página anterior.</p>
+      }
     </div>
 
     @if (task()) {

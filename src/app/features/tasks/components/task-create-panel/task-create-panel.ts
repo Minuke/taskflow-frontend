@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, input } from '@angular/core';
 import { Router } from '@angular/router';
 import { Location } from '@angular/common';
 import { TaskForm } from '@features/tasks/components/task-form/task-form';
@@ -10,6 +10,8 @@ import { TaskForm } from '@features/tasks/components/task-form/task-form';
   styleUrl: './task-create-panel.scss',
 })
 export class TaskCreatePanel {
+  readonly presetCategoryId = input<string | null>(null);
+
   private readonly location = inject(Location);
   private readonly router = inject(Router);
 
