@@ -1,5 +1,5 @@
 <div class="form-panel card">
-  <a routerLink="/tasks" class="form-panel-back">← Volver a tareas</a>
+  <button type="button" class="form-panel-back" (click)="goBack()">← Volver atrás</button>
   <h2>Nueva tarea</h2>
   <app-task-form (saved)="onSaved()"></app-task-form>
 </div>

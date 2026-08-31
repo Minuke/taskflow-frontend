@@ -1,6 +1,6 @@
 @if (task(); as t) {
   <div class="detail-page card">
-    <a routerLink="/tasks" class="form-panel-back">← Volver a tareas</a>
+    <button type="button" class="form-panel-back" (click)="goBack()">← Volver atrás</button>
     <h2>{{ t.title }}</h2>
     <p class="detail-meta">
       {{ categoryName() }} · {{ t.priority | priorityLabel }} · {{ t.completed ? 'Completada' : 'Pendiente' }}

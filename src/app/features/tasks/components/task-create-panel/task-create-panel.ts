@@ -1,17 +1,23 @@
 import { Component, inject } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
+import { Location } from '@angular/common';
 import { TaskForm } from '@features/tasks/components/task-form/task-form';
 
 @Component({
   selector: 'app-task-create-panel',
-  imports: [TaskForm, RouterLink],
+  imports: [TaskForm],
   templateUrl: './task-create-panel.html',
   styleUrl: './task-create-panel.scss',
 })
 export class TaskCreatePanel {
+  private readonly location = inject(Location);
   private readonly router = inject(Router);
 
   protected async onSaved(): Promise<void> {
     await this.router.navigate(['/tasks']);
+  }
+
+  protected goBack(): void {
+    this.location.back();
   }
 }

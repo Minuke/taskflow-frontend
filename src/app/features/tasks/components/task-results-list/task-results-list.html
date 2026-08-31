@@ -1,0 +1,31 @@
+<ul class="task-list">
+  @for (task of tasks(); track task.id) {
+    <li class="task-list-item card card-compact" [class.task-list-item-overdue]="isOverdue(task.dueDate)"
+      [class.task-list-item-completed]="task.completed">
+      <div class="task-list-item-content">
+        <h4>{{ task.title }}</h4>
+        <p>
+          {{ categoryNameFor(task.categoryId) }} · {{ task.priority | priorityLabel }} ·
+          {{ task.completed ? 'Completada' : 'Pendiente' }}
+        </p>
+        @if (task.dueDate) {
+          <p>Vence: {{ task.dueDate | friendlyDate }}</p>
+        }
+        @if (task.priority === Priority.High) {
+          <span class="priority-badge">⭐ Prioritaria</span>
+        }
+      </div>
+      <div class="task-list-item-actions">
+        <a class="btn" [routerLink]="['/tasks', task.id]">Ver</a>
+        <a class="btn" [routerLink]="['/tasks', task.id, 'edit']">Editar</a>
+        <button type="button" (click)="toggleComplete.emit(task.id)">
+          {{ task.completed ? 'Reabrir' : 'Completar' }}
+        </button>
+        <button type="button" class="btn-danger" (click)="deleteRequested.emit(task)">Eliminar</button>
+      </div>
+    </li>
+  }
+</ul>
+
+<app-pagination [totalItems]="totalItems()" [pageSize]="pageSize()" [currentPage]="currentPage()"
+  (pageChanged)="pageChanged.emit($event)"></app-pagination>

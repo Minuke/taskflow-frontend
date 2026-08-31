@@ -1,12 +1,14 @@
 import { Component, inject, signal, computed, effect } from '@angular/core';
-import { RouterLink } from '@angular/router';
 import { TasksStore } from '@core/services/tasks-store';
 import { CategoriesStore } from '@core/services/categories-store';
 import { ConfirmDialog } from '@shared/components/confirm-dialog/confirm-dialog';
-import { Pagination } from '@shared/components/pagination/pagination';
 import { SkeletonList } from '@shared/components/skeleton-list/skeleton-list';
-import { PriorityLabelPipe } from '@core/pipes/priority-label.pipe';
-import { FriendlyDatePipe } from '@core/pipes/friendly-date.pipe';
+import {
+  TaskFiltersPanel,
+  TaskSortField,
+  SortDirection,
+} from '@features/tasks/components/task-filters-panel/task-filters-panel';
+import { TaskResultsList } from '@features/tasks/components/task-results-list/task-results-list';
 import { Task } from '@core/models/task.model';
 import { Priority } from '@core/models/priority.enum';
 import { TaskStatus } from '@core/models/task-status.enum';
@@ -14,12 +16,11 @@ import { DueFilter } from '@core/models/due-filter.enum';
 import { isOverdue, isDueToday, isUpcoming } from '@core/utils/task-date.utils';
 import { priorityWeight } from '@core/utils/priority.utils';
 
-type TaskSortField = 'title' | 'priority' | 'dueDate' | 'createdAt' | 'updatedAt';
-type SortDirection = 'asc' | 'desc';
+const PAGE_SIZE = 10;
 
 @Component({
   selector: 'app-task-list',
-  imports: [RouterLink, ConfirmDialog, Pagination, SkeletonList, PriorityLabelPipe, FriendlyDatePipe],
+  imports: [ConfirmDialog, SkeletonList, TaskFiltersPanel, TaskResultsList],
   templateUrl: './task-list.html',
   styleUrl: './task-list.scss',
 })
@@ -27,37 +28,26 @@ export class TaskList {
   protected readonly tasksStore = inject(TasksStore);
   protected readonly categoriesStore = inject(CategoriesStore);
 
-  private static readonly PAGE_SIZE = 10;
-
-  protected readonly TaskStatus = TaskStatus;
-  protected readonly Priority = Priority;
-  protected readonly DueFilter = DueFilter;
-  protected readonly pageSize = TaskList.PAGE_SIZE;
+  protected readonly pageSize = PAGE_SIZE;
 
   protected readonly deletingTask = signal<Task | null>(null);
   protected readonly currentPage = signal(1);
 
   protected readonly searchTerm = signal('');
-  protected readonly statusFilter = signal<TaskStatus>(TaskStatus.All);
+  protected readonly statusFilter = signal<TaskStatus>(TaskStatus.Pending);
   protected readonly priorityFilter = signal<Priority | 'all'>('all');
   protected readonly categoryFilter = signal<number | 'all'>('all');
   protected readonly dueFilter = signal<DueFilter>(DueFilter.All);
-  protected readonly sortField = signal<TaskSortField>('dueDate');
-  protected readonly sortDirection = signal<SortDirection>('asc');
-
-  protected readonly isSearchActive = computed(() => this.searchTerm().trim().length > 0);
-  protected readonly isStatusActive = computed(() => this.statusFilter() !== TaskStatus.All);
-  protected readonly isPriorityActive = computed(() => this.priorityFilter() !== 'all');
-  protected readonly isCategoryActive = computed(() => this.categoryFilter() !== 'all');
-  protected readonly isDueActive = computed(() => this.dueFilter() !== DueFilter.All);
+  protected readonly sortField = signal<TaskSortField>('updatedAt');
+  protected readonly sortDirection = signal<SortDirection>('desc');
 
   protected readonly hasActiveFilters = computed(
     () =>
-      this.isSearchActive() ||
-      this.isStatusActive() ||
-      this.isPriorityActive() ||
-      this.isCategoryActive() ||
-      this.isDueActive(),
+      this.searchTerm().trim().length > 0 ||
+      this.statusFilter() !== TaskStatus.Pending ||
+      this.priorityFilter() !== 'all' ||
+      this.categoryFilter() !== 'all' ||
+      this.dueFilter() !== DueFilter.All,
   );
 
   protected readonly paginatedTasks = computed(() => {
@@ -150,56 +140,14 @@ export class TaskList {
     this.tasksStore.toggleComplete(taskId);
   }
 
-  protected isOverdue(dueDate: string | null): boolean {
-    return isOverdue(dueDate);
-  }
-
-  protected categoryNameFor(categoryId: number | null): string {
-    if (!categoryId) {
-      return 'Sin categoría';
-    }
-    return (
-      this.categoriesStore.userCategories().find((c) => c.id === categoryId)?.name ??
-      'Sin categoría'
-    );
-  }
-
-  protected onSearchInput(event: Event): void {
-    this.searchTerm.set((event.target as HTMLInputElement).value);
-  }
-
-  protected onStatusFilterChange(event: Event): void {
-    this.statusFilter.set((event.target as HTMLSelectElement).value as TaskStatus);
-  }
-
-  protected onPriorityFilterChange(event: Event): void {
-    const value = (event.target as HTMLSelectElement).value;
-    this.priorityFilter.set(value === 'all' ? 'all' : (value as Priority));
-  }
-
-  protected onCategoryFilterChange(event: Event): void {
-    const value = (event.target as HTMLSelectElement).value;
-    this.categoryFilter.set(value === 'all' ? 'all' : Number(value));
-  }
-
-  protected onDueFilterChange(event: Event): void {
-    this.dueFilter.set((event.target as HTMLSelectElement).value as DueFilter);
-  }
-
-  protected onSortFieldChange(event: Event): void {
-    this.sortField.set((event.target as HTMLSelectElement).value as TaskSortField);
-  }
-
-  protected toggleSortDirection(): void {
-    this.sortDirection.update((dir) => (dir === 'asc' ? 'desc' : 'asc'));
-  }
-
   protected resetFilters(): void {
     this.searchTerm.set('');
-    this.statusFilter.set(TaskStatus.All);
+    this.statusFilter.set(TaskStatus.Pending);
     this.priorityFilter.set('all');
     this.categoryFilter.set('all');
     this.dueFilter.set(DueFilter.All);
+    this.sortField.set('updatedAt');
+    this.sortDirection.set('desc');
   }
 
   protected onDeleteRequested(task: Task): void {
@@ -225,19 +173,28 @@ export class TaskList {
     const factor = direction === 'asc' ? 1 : -1;
 
     return tasks.sort((a, b) => {
-      switch (field) {
-        case 'title':
-          return a.title.localeCompare(b.title) * factor;
-        case 'priority':
-          return (priorityWeight(a.priority) - priorityWeight(b.priority)) * factor;
-        case 'dueDate':
-          return this.compareNullableDates(a.dueDate, b.dueDate) * factor;
-        case 'createdAt':
-          return a.createdAt.localeCompare(b.createdAt) * factor;
-        case 'updatedAt':
-          return a.updatedAt.localeCompare(b.updatedAt) * factor;
+      const primary = this.comparePrimary(a, b, field) * factor;
+      if (primary !== 0) {
+        return primary;
       }
+      // Desempate: siempre por prioridad, de Alta a Baja, independientemente del criterio principal.
+      return priorityWeight(b.priority) - priorityWeight(a.priority);
     });
+  }
+
+  private comparePrimary(a: Task, b: Task, field: TaskSortField): number {
+    switch (field) {
+      case 'title':
+        return a.title.localeCompare(b.title);
+      case 'priority':
+        return priorityWeight(a.priority) - priorityWeight(b.priority);
+      case 'dueDate':
+        return this.compareNullableDates(a.dueDate, b.dueDate);
+      case 'createdAt':
+        return a.createdAt.localeCompare(b.createdAt);
+      case 'updatedAt':
+        return a.updatedAt.localeCompare(b.updatedAt);
+    }
   }
 
   private compareNullableDates(a: string | null, b: string | null): number {

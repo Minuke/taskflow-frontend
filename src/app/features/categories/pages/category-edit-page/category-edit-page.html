@@ -1,6 +1,6 @@
 @if (category(); as c) {
   <div class="form-panel card">
-    <a routerLink="/categories" class="form-panel-back">← Volver a categorías</a>
+    <button type="button" class="form-panel-back" (click)="goBack()">← Volver atrás</button>
     <h2>Editar categoría</h2>
     <app-category-form [category]="c" (saved)="onSaved()" (cancelled)="onCancelled()"></app-category-form>
   </div>

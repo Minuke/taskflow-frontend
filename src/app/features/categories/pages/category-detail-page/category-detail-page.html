@@ -1,6 +1,6 @@
 @if (category(); as c) {
   <div class="detail-page card">
-    <a routerLink="/categories" class="form-panel-back">← Volver a categorías</a>
+    <button type="button" class="form-panel-back" (click)="goBack()">← Volver atrás</button>
     <h2>{{ c.name }}</h2>
     @if (c.description) {
       <p>{{ c.description }}</p>
@@ -11,18 +11,11 @@
     </p>
 
     @if (associatedTasks().length > 0) {
-      <ul class="task-list">
+      <div class="task-chip-list">
         @for (task of associatedTasks(); track task.id) {
-          <li>
-            <a class="task-mini-card card card-compact" [routerLink]="['/tasks', task.id]">
-              <span class="dashboard-task-title">{{ task.title }}</span>
-              <span class="dashboard-task-meta">
-                {{ task.priority | priorityLabel }} · {{ task.completed ? 'Completada' : 'Pendiente' }}
-              </span>
-            </a>
-          </li>
+          <a class="task-chip" [routerLink]="['/tasks', task.id]">{{ task.title }}</a>
         }
-      </ul>
+      </div>
     } @else {
       <p class="empty-state">Esta categoría todavía no tiene tareas asociadas.</p>
     }

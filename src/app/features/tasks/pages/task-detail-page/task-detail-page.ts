@@ -1,5 +1,5 @@
 import { Component, inject, input, computed } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { Location } from '@angular/common';
 import { TasksStore } from '@core/services/tasks-store';
 import { CategoriesStore } from '@core/services/categories-store';
 import { PriorityLabelPipe } from '@core/pipes/priority-label.pipe';
@@ -8,13 +8,14 @@ import { Priority } from '@core/models/priority.enum';
 
 @Component({
   selector: 'app-task-detail-page',
-  imports: [RouterLink, PriorityLabelPipe, FriendlyDatePipe],
+  imports: [PriorityLabelPipe, FriendlyDatePipe],
   templateUrl: './task-detail-page.html',
   styleUrl: './task-detail-page.scss',
 })
 export class TaskDetailPage {
   readonly id = input.required<string>();
 
+  private readonly location = inject(Location);
   private readonly tasksStore = inject(TasksStore);
   private readonly categoriesStore = inject(CategoriesStore);
 
@@ -32,4 +33,8 @@ export class TaskDetailPage {
       'Sin categoría'
     );
   });
+
+  protected goBack(): void {
+    this.location.back();
+  }
 }

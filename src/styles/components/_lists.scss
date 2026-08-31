@@ -68,3 +68,11 @@
   font-size: 0.85rem;
   color: var(--color-text-muted);
 }
+
+.task-list-item-overdue {
+  border-left: 3px solid var(--color-danger);
+}
+
+.task-list-item-completed {
+  opacity: 0.6;
+}

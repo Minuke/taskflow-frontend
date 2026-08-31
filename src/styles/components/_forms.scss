@@ -76,6 +76,15 @@
   margin-bottom: var(--space-3);
   font-size: 0.85rem;
   color: var(--color-text-muted);
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+}
+
+.form-panel-back:hover {
+  text-decoration: underline;
+  border-color: transparent;
 }
 
 // Espaciado entre botones de acciones de formulario — antes no existía, por eso se veían pegados (Puntos 2, 3, 10)

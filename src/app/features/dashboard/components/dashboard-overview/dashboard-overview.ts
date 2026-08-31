@@ -1,4 +1,5 @@
 import { Component, inject } from '@angular/core';
+import { RouterLink } from '@angular/router';
 import { TasksStore } from '@core/services/tasks-store';
 import { DashboardSummary } from '@features/dashboard/components/dashboard-summary/dashboard-summary';
 import { UpcomingTasks } from '@features/dashboard/components/upcoming-tasks/upcoming-tasks';
@@ -9,7 +10,15 @@ import { SkeletonList } from '@shared/components/skeleton-list/skeleton-list';
 
 @Component({
   selector: 'app-dashboard-overview',
-  imports: [DashboardSummary, UpcomingTasks, PriorityTasks, RecentTasks, DashboardEmptyState, SkeletonList],
+  imports: [
+    RouterLink,
+    DashboardSummary,
+    UpcomingTasks,
+    PriorityTasks,
+    RecentTasks,
+    DashboardEmptyState,
+    SkeletonList,
+  ],
   templateUrl: './dashboard-overview.html',
   styleUrl: './dashboard-overview.scss',
 })

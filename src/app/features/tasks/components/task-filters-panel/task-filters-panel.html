@@ -1,0 +1,69 @@
+<div class="task-filters-bar card">
+  <div class="filter-group" [class.filter-group-active]="statusFilter() !== TaskStatus.Pending">
+    <label for="task-status-filter">Estado</label>
+    <select id="task-status-filter" [value]="statusFilter()" (change)="onStatusChange($event)">
+      <option [value]="TaskStatus.All">Todas</option>
+      <option [value]="TaskStatus.Pending">Pendientes</option>
+      <option [value]="TaskStatus.Completed">Completadas</option>
+    </select>
+  </div>
+
+  <div class="filter-group" [class.filter-group-active]="priorityFilter() !== 'all'">
+    <label for="task-priority-filter">Prioridad</label>
+    <select id="task-priority-filter" [value]="priorityFilter()" (change)="onPriorityChange($event)">
+      <option value="all">Todas</option>
+      <option [value]="Priority.Low">Baja</option>
+      <option [value]="Priority.Medium">Media</option>
+      <option [value]="Priority.High">Alta</option>
+    </select>
+  </div>
+
+  <div class="filter-group" [class.filter-group-active]="categoryFilter() !== 'all'">
+    <label for="task-category-filter">Categoría</label>
+    <select id="task-category-filter" [value]="categoryFilter()" (change)="onCategoryChange($event)">
+      <option value="all">Todas</option>
+      @for (category of categories(); track category.id) {
+        <option [value]="category.id">{{ category.name }}</option>
+      }
+    </select>
+  </div>
+
+  <div class="filter-group" [class.filter-group-active]="dueFilter() !== DueFilter.All">
+    <label for="task-due-filter">Fecha</label>
+    <select id="task-due-filter" [value]="dueFilter()" (change)="onDueChange($event)">
+      <option [value]="DueFilter.All">Todas</option>
+      <option [value]="DueFilter.Overdue">Vencidas</option>
+      <option [value]="DueFilter.Today">Hoy</option>
+      <option [value]="DueFilter.Upcoming">Próximas</option>
+      <option [value]="DueFilter.NoDate">Sin fecha</option>
+    </select>
+  </div>
+
+  <div class="filter-group" [class.filter-group-active]="searchTerm().trim().length > 0">
+    <label for="task-search">Buscar</label>
+    <input id="task-search" type="text" placeholder="Título o descripción..." [value]="searchTerm()"
+      (input)="onSearchInput($event)" />
+  </div>
+
+  <div class="filter-group">
+    <label for="task-sort-field">Ordenar por</label>
+    <div class="filter-sort-row">
+      <select id="task-sort-field" [value]="sortField()" (change)="onSortFieldChange($event)">
+        <option value="updatedAt">Modificación</option>
+        <option value="title">Título</option>
+        <option value="priority">Prioridad</option>
+        <option value="dueDate">Vencimiento</option>
+        <option value="createdAt">Creación</option>
+      </select>
+      <button type="button" (click)="sortDirectionToggled.emit()">
+        {{ sortDirection() === 'asc' ? '↑' : '↓' }}
+      </button>
+    </div>
+  </div>
+
+  <div class="filter-group filter-group-reset">
+    <button type="button" [disabled]="!hasActiveFilters()" (click)="resetRequested.emit()">
+      Limpiar filtros
+    </button>
+  </div>
+</div>
