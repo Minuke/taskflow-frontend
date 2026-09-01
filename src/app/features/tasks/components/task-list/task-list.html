@@ -1,50 +1,56 @@
-<app-task-filters-panel
-  [categories]="categoriesStore.userCategories()"
-  [searchTerm]="filtersStore.searchTerm()"
-  [statusFilter]="filtersStore.statusFilter()"
-  [priorityFilter]="filtersStore.priorityFilter()"
-  [categoryFilter]="filtersStore.categoryFilter()"
-  [dueFilter]="filtersStore.dueFilter()"
-  [sortField]="filtersStore.sortField()"
-  [sortDirection]="filtersStore.sortDirection()"
-  [hasActiveFilters]="hasActiveFilters()"
-  (searchChanged)="filtersStore.searchTerm.set($event)"
-  (statusChanged)="filtersStore.statusFilter.set($event)"
-  (priorityChanged)="filtersStore.priorityFilter.set($event)"
-  (categoryChanged)="filtersStore.categoryFilter.set($event)"
-  (dueChanged)="filtersStore.dueFilter.set($event)"
-  (sortFieldChanged)="filtersStore.sortField.set($event)"
-  (sortDirectionToggled)="filtersStore.sortDirection.set(filtersStore.sortDirection() === 'asc' ? 'desc' : 'asc')"
-  (resetRequested)="resetFilters()">
-</app-task-filters-panel>
+<div class="tasks-layout">
+  <aside class="tasks-sidebar">
+    <app-task-filters-panel
+      [categories]="categoriesStore.userCategories()"
+      [searchTerm]="filtersStore.searchTerm()"
+      [statusFilter]="filtersStore.statusFilter()"
+      [priorityFilter]="filtersStore.priorityFilter()"
+      [categoryFilter]="filtersStore.categoryFilter()"
+      [dueFilter]="filtersStore.dueFilter()"
+      [sortField]="filtersStore.sortField()"
+      [sortDirection]="filtersStore.sortDirection()"
+      [hasActiveFilters]="hasActiveFilters()"
+      (searchChanged)="filtersStore.searchTerm.set($event)"
+      (statusChanged)="filtersStore.statusFilter.set($event)"
+      (priorityChanged)="filtersStore.priorityFilter.set($event)"
+      (categoryChanged)="filtersStore.categoryFilter.set($event)"
+      (dueChanged)="filtersStore.dueFilter.set($event)"
+      (sortFieldChanged)="filtersStore.sortField.set($event)"
+      (sortDirectionToggled)="filtersStore.sortDirection.set(filtersStore.sortDirection() === 'asc' ? 'desc' : 'asc')"
+      (resetRequested)="resetFilters()">
+    </app-task-filters-panel>
+  </aside>
 
-@if (tasksStore.isLoading()) {
-  <app-skeleton-list [rows]="5"></app-skeleton-list>
-} @else if (tasksStore.error(); as error) {
-  <div class="error-state">
-    <p>{{ error }}</p>
-    <button type="button" (click)="onRetry()">Reintentar</button>
-  </div>
-} @else if (filteredTasks().length === 0) {
-  <p class="empty-state">
-    @if (tasksStore.userTasks().length === 0) {
-      Todavía no tienes tareas. Crea la primera con el botón "Crear tarea".
+  <div class="tasks-main">
+    @if (tasksStore.isLoading()) {
+      <app-skeleton-list [rows]="5"></app-skeleton-list>
+    } @else if (tasksStore.error(); as error) {
+      <div class="error-state">
+        <p>{{ error }}</p>
+        <button type="button" (click)="onRetry()">Reintentar</button>
+      </div>
+    } @else if (filteredTasks().length === 0) {
+      <p class="empty-state">
+        @if (tasksStore.userTasks().length === 0) {
+          Todavía no tienes tareas. Crea la primera con el botón "Crear tarea".
+        } @else {
+          Ningún resultado coincide con la búsqueda o los filtros aplicados.
+        }
+      </p>
     } @else {
-      Ningún resultado coincide con la búsqueda o los filtros aplicados.
+      <app-task-results-list
+        [tasks]="paginatedTasks()"
+        [categories]="categoriesStore.userCategories()"
+        [totalItems]="totalFilteredTasks()"
+        [pageSize]="pageSize"
+        [currentPage]="currentPage()"
+        (completeRequested)="onCompleteRequested($event)"
+        (deleteRequested)="onDeleteRequested($event)"
+        (pageChanged)="onPageChanged($event)">
+      </app-task-results-list>
     }
-  </p>
-} @else {
-  <app-task-results-list
-    [tasks]="paginatedTasks()"
-    [categories]="categoriesStore.userCategories()"
-    [totalItems]="totalFilteredTasks()"
-    [pageSize]="pageSize"
-    [currentPage]="currentPage()"
-    (completeRequested)="onCompleteRequested($event)"
-    (deleteRequested)="onDeleteRequested($event)"
-    (pageChanged)="onPageChanged($event)">
-  </app-task-results-list>
-}
+  </div>
+</div>
 
 @if (deletingTask(); as task) {
   <app-confirm-dialog title="Eliminar tarea" (confirmed)="onDeleteConfirmed(task.id)" (cancelled)="onDeleteCancelled()">

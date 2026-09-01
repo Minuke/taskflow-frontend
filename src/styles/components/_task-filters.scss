@@ -1,37 +1,19 @@
-.task-filters-bar {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: flex-end;
-  gap: var(--space-4);
-  padding: var(--space-3);
-  margin-bottom: var(--space-4);
-}
+@use 'abstracts/breakpoints' as *;
 
-.filter-group {
+.task-filters {
   display: flex;
   flex-direction: column;
-  gap: var(--space-1);
-  flex: 0 1 auto;
-  min-width: 130px;
-  padding: var(--space-1) var(--space-2);
-  border-radius: var(--radius-sm);
-  border: 1px solid transparent;
-  transition: border-color 0.15s ease, background-color 0.15s ease;
+  gap: var(--space-3);
 }
 
-.filter-group-active {
-  border-color: var(--color-primary);
-  background: rgb(59 130 246 / 8%);
+.task-filters-searchbar {
+  display: flex;
+  gap: var(--space-2);
 }
 
-.filter-group label {
-  font-size: 0.75rem;
-  font-weight: 600;
-  color: var(--color-text-muted);
-}
-
-.filter-group input,
-.filter-group select {
+.task-filters-searchbar input {
+  flex: 1;
+  min-width: 0;
   padding: var(--space-2) var(--space-3);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
@@ -40,7 +22,106 @@
   font: inherit;
 }
 
-// "Ordenar por" + flecha van pegados entre sí — es el único par que debe ir junto.
+.task-filters-toggle {
+  position: relative;
+  flex-shrink: 0;
+
+  @include breakpoint-up($breakpoint-lg) {
+    display: none; // En escritorio todos los filtros están siempre visibles.
+  }
+}
+
+.filter-dot {
+  display: inline-block;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-radius: 50%;
+  background: var(--color-primary);
+  margin-left: var(--space-1);
+  vertical-align: middle;
+}
+
+.task-filters-panel {
+  display: none;
+  flex-direction: column;
+  gap: var(--space-2);
+
+  &.task-filters-panel-open {
+    display: flex;
+  }
+
+  @include breakpoint-up($breakpoint-lg) {
+    display: flex;
+    position: sticky;
+    top: var(--space-4);
+  }
+}
+
+.filter-accordion {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  overflow: hidden;
+}
+
+.filter-accordion-active {
+  border-color: var(--color-primary);
+  background: rgb(59 130 246 / 8%);
+}
+
+.filter-accordion-summary {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: var(--space-2) var(--space-3);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.filter-accordion-summary::after {
+  content: '▾';
+  float: right;
+}
+
+.filter-accordion-summary[aria-expanded='true']::after {
+  content: '▴';
+}
+
+.filter-accordion-content {
+  display: none;
+  padding: 0 var(--space-3) var(--space-3);
+}
+
+.filter-accordion-content-open {
+  display: block;
+}
+
+.filter-field-label {
+  display: block;
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+  margin-bottom: var(--space-1);
+
+  @include breakpoint-up($breakpoint-lg) {
+    display: block; // Visible en escritorio, que es donde el <summary> se oculta y hace más falta.
+  }
+}
+
+.filter-accordion select {
+  width: 100%;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-text);
+  font: inherit;
+}
+
 .filter-sort-row {
   display: flex;
   gap: var(--space-1);
@@ -48,9 +129,27 @@
 
 .filter-sort-row select {
   flex: 1;
-  min-width: 8rem;
+  min-width: 0;
 }
 
-.filter-group-reset {
-  min-width: auto;
+.filter-sort-direction {
+  flex-shrink: 0;
+  padding: var(--space-2) var(--space-3);
+}
+
+.filter-reset-btn {
+  margin-top: var(--space-1);
+}
+
+// Escritorio: cabecera de cada caja oculta, contenido siempre visible.
+// Al no depender de <details>, no hay colapso de tamaño ni bug de posicionamiento del select.
+@include breakpoint-up($breakpoint-lg) {
+  .filter-accordion-summary {
+    display: none;
+  }
+
+  .filter-accordion-content {
+    display: block !important;
+    padding: var(--space-3);
+  }
 }

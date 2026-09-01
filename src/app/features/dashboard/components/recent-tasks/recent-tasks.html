@@ -6,7 +6,7 @@
     <ul class="dashboard-task-list">
       @for (task of recentTasks(); track task.id) {
         <li>
-          <a class="task-mini-card card card-compact" [routerLink]="['/tasks', task.id]">
+          <a class="task-mini-card card card-compact" [class.task-mini-card-completed]="task.completed" [routerLink]="['/tasks', task.id]">
             <span class="dashboard-task-title">{{ task.title }}</span>
             <span class="dashboard-task-meta">
               {{ categoryNameFor(task.categoryId) }} · {{ task.priority | priorityLabel }} ·

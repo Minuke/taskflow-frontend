@@ -4,6 +4,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-1);
+  min-width: 0; // Permite que el item de grid se encoja por debajo del ancho intrínseco de su contenido.
   margin-bottom: var(--space-4);
 }
 
@@ -15,7 +16,8 @@
 .form-group input,
 .form-group select,
 .form-group textarea {
-  resize: vertical;
+  width: 100%;
+  max-width: 100%;
   padding: var(--space-2) var(--space-3);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-sm);
@@ -24,11 +26,23 @@
   color: var(--color-text);
 }
 
+.form-group textarea {
+  resize: vertical;
+}
+
 .form-group input:focus,
 .form-group select:focus,
 .form-group textarea:focus {
   outline: 2px solid var(--color-primary);
   outline-offset: 1px;
+}
+
+.form-group select:disabled,
+.form-group input:disabled,
+.form-group textarea:disabled {
+  background: var(--color-border);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
 }
 
 .form-group-checkbox {
@@ -50,7 +64,6 @@
   margin: 0;
 }
 
-// Grid compacto de 2 columnas para formularios largos (Punto 11)
 .form-grid {
   display: grid;
   grid-template-columns: 1fr;
@@ -65,7 +78,6 @@
   grid-column: 1 / -1;
 }
 
-// Panel centrado reutilizado por creación y edición de tareas/categorías (Punto 11)
 .form-panel {
   max-width: 36rem;
   margin: var(--space-6) auto 0;
@@ -84,21 +96,11 @@
 
 .form-panel-back:hover {
   text-decoration: underline;
-  border-color: transparent;
 }
 
-// Espaciado entre botones de acciones de formulario — antes no existía, por eso se veían pegados (Puntos 2, 3, 10)
 .task-form-actions,
 .category-form-actions {
   display: flex;
   gap: var(--space-2);
   margin-top: var(--space-2);
-}
-
-.form-group select:disabled,
-.form-group input:disabled,
-.form-group textarea:disabled {
-  background: var(--color-border);
-  color: var(--color-text-muted);
-  cursor: not-allowed;
 }

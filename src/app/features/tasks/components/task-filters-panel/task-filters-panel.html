@@ -1,68 +1,103 @@
-<div class="task-filters-bar card">
-  <div class="filter-group" [class.filter-group-active]="statusFilter() !== 'all'">
-    <label for="task-status-filter">Estado</label>
-    <select id="task-status-filter" [value]="statusFilter()" (change)="onStatusChange($event)">
-      <option value="all">Todas</option>
-      <option value="pending">Pendientes</option>
-      <option value="completed">Completadas</option>
-    </select>
-  </div>
-
-  <div class="filter-group" [class.filter-group-active]="priorityFilter() !== 'all'">
-    <label for="task-priority-filter">Prioridad</label>
-    <select id="task-priority-filter" [value]="priorityFilter()" (change)="onPriorityChange($event)">
-      <option value="all">Todas</option>
-      <option value="low">Baja</option>
-      <option value="medium">Media</option>
-      <option value="high">Alta</option>
-    </select>
-  </div>
-
-  <div class="filter-group" [class.filter-group-active]="categoryFilter() !== 'all'">
-    <label for="task-category-filter">Categoría</label>
-    <select id="task-category-filter" [value]="categoryFilter()" (change)="onCategoryChange($event)">
-      <option value="all">Todas</option>
-      @for (category of categories(); track category.id) {
-        <option [value]="category.id">{{ category.name }}</option>
-      }
-    </select>
-  </div>
-
-  <div class="filter-group" [class.filter-group-active]="dueFilter() !== 'all'">
-    <label for="task-due-filter">Fecha</label>
-    <select id="task-due-filter" [value]="dueFilter()" (change)="onDueChange($event)">
-      <option value="all">Todas</option>
-      <option value="overdue">Vencidas</option>
-      <option value="today">Hoy</option>
-      <option value="upcoming">Próximas</option>
-      <option value="noDate">Sin fecha</option>
-    </select>
-  </div>
-
-  <div class="filter-group" [class.filter-group-active]="searchTerm().trim().length > 0">
-    <label for="task-search">Buscar</label>
-    <input id="task-search" type="text" placeholder="Título o descripción..." [value]="searchTerm()"
+<div class="task-filters">
+  <div class="task-filters-searchbar">
+    <input type="text" placeholder="Buscar por título o descripción..." [value]="searchTerm()"
       (input)="onSearchInput($event)" />
+    <button type="button" class="btn task-filters-toggle" (click)="toggleMobilePanel()">
+      Filtros
+      @if (hasActiveFilters()) {
+        <span class="filter-dot"></span>
+      }
+    </button>
   </div>
 
-  <div class="filter-group">
-    <label for="task-sort-field">Ordenar por</label>
-    <div class="filter-sort-row">
-      <select id="task-sort-field" [value]="sortField()" (change)="onSortFieldChange($event)">
-        <option value="updatedAt">Modificación</option>
-        <option value="title">Título</option>
-        <option value="priority">Prioridad</option>
-        <option value="dueDate">Vencimiento</option>
-        <option value="createdAt">Creación</option>
-      </select>
-      <button type="button" (click)="sortDirectionToggled.emit()">
-        {{ sortDirection() === 'asc' ? '↑' : '↓' }}
+  <div class="task-filters-panel" [class.task-filters-panel-open]="isMobilePanelOpen()">
+    <div class="filter-accordion" [class.filter-accordion-active]="statusFilter() !== 'all'">
+      <button type="button" class="filter-accordion-summary" [attr.aria-expanded]="isAccordionOpen('status')"
+        (click)="toggleAccordion('status')">
+        Estado: {{ statusLabel() }}
       </button>
+      <div class="filter-accordion-content" [class.filter-accordion-content-open]="isAccordionOpen('status')">
+        <label for="task-status-select" class="filter-field-label">Estado</label>
+        <select id="task-status-select" [value]="statusFilter()" (change)="onStatusChange($event)">
+          <option value="all">Todas</option>
+          <option value="pending">Pendientes</option>
+          <option value="completed">Completadas</option>
+        </select>
+      </div>
     </div>
-  </div>
 
-  <div class="filter-group filter-group-reset">
-    <button type="button" [disabled]="!hasActiveFilters()" (click)="resetRequested.emit()">
+    <div class="filter-accordion" [class.filter-accordion-active]="priorityFilter() !== 'all'">
+      <button type="button" class="filter-accordion-summary" [attr.aria-expanded]="isAccordionOpen('priority')"
+        (click)="toggleAccordion('priority')">
+        Prioridad: {{ priorityLabel() }}
+      </button>
+      <div class="filter-accordion-content" [class.filter-accordion-content-open]="isAccordionOpen('priority')">
+        <label for="task-priority-select" class="filter-field-label">Prioridad</label>
+        <select id="task-priority-select" [value]="priorityFilter()" (change)="onPriorityChange($event)">
+          <option value="all">Todas</option>
+          <option value="low">Baja</option>
+          <option value="medium">Media</option>
+          <option value="high">Alta</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="filter-accordion" [class.filter-accordion-active]="categoryFilter() !== 'all'">
+      <button type="button" class="filter-accordion-summary" [attr.aria-expanded]="isAccordionOpen('category')"
+        (click)="toggleAccordion('category')">
+        Categoría: {{ categoryLabel() }}
+      </button>
+      <div class="filter-accordion-content" [class.filter-accordion-content-open]="isAccordionOpen('category')">
+        <label for="task-category-select" class="filter-field-label">Categoría</label>
+        <select id="task-category-select" [value]="categoryFilter()" (change)="onCategoryChange($event)">
+          <option value="all">Todas</option>
+          @for (category of categories(); track category.id) {
+            <option [value]="category.id">{{ category.name }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    <div class="filter-accordion" [class.filter-accordion-active]="dueFilter() !== 'all'">
+      <button type="button" class="filter-accordion-summary" [attr.aria-expanded]="isAccordionOpen('due')"
+        (click)="toggleAccordion('due')">
+        Fecha: {{ dueLabel() }}
+      </button>
+      <div class="filter-accordion-content" [class.filter-accordion-content-open]="isAccordionOpen('due')">
+        <label for="task-due-select" class="filter-field-label">Fecha</label>
+        <select id="task-due-select" [value]="dueFilter()" (change)="onDueChange($event)">
+          <option value="all">Todas</option>
+          <option value="overdue">Vencidas</option>
+          <option value="today">Hoy</option>
+          <option value="upcoming">Próximas</option>
+          <option value="noDate">Sin fecha</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="filter-accordion">
+      <button type="button" class="filter-accordion-summary" [attr.aria-expanded]="isAccordionOpen('sort')"
+        (click)="toggleAccordion('sort')">
+        Ordenar: {{ sortLabel() }}
+      </button>
+      <div class="filter-accordion-content" [class.filter-accordion-content-open]="isAccordionOpen('sort')">
+         <label for="task-sort-select" class="filter-field-label">Ordenar por</label>
+        <div class="filter-sort-row">
+          <select id="task-sort-select" [value]="sortField()" (change)="onSortFieldChange($event)">
+            <option value="updatedAt">Modificación</option>
+            <option value="title">Título</option>
+            <option value="priority">Prioridad</option>
+            <option value="dueDate">Vencimiento</option>
+            <option value="createdAt">Creación</option>
+          </select>
+          <button type="button" class="filter-sort-direction" (click)="sortDirectionToggled.emit()">
+            {{ sortDirection() === 'asc' ? '↑' : '↓' }}
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <button type="button" class="filter-reset-btn" [disabled]="!hasActiveFilters()" (click)="resetRequested.emit()">
       Limpiar filtros
     </button>
   </div>
