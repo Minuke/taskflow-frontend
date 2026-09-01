@@ -11,12 +11,12 @@
   <ul class="category-list">
     @for (category of categoriesStore.userCategories(); track category.id) {
       <li class="category-list-item card card-compact">
+        <a class="stretched-link" [routerLink]="['/categories', category.id]" [attr.aria-label]="'Ver ' + category.name"></a>
         <div class="category-list-item-content">
           <h4>{{ category.name }}</h4>
           <p class="category-task-count">{{ taskCountFor(category.id) }} tareas</p>
         </div>
         <div class="category-list-item-actions">
-          <a class="btn" [routerLink]="['/categories', category.id]">Ver</a>
           <a class="btn" [routerLink]="['/categories', category.id, 'edit']">Editar</a>
           <button type="button" class="btn-danger" (click)="onDeleteRequested(category)">Eliminar</button>
         </div>

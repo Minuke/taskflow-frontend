@@ -1,6 +1,5 @@
 @use 'abstracts/breakpoints' as *;
 
-// Tareas: una por fila, contenido a la izquierda y acciones a la derecha en pantallas medianas+
 .task-list {
   display: flex;
   flex-direction: column;
@@ -8,6 +7,7 @@
 }
 
 .task-list-item {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
@@ -19,17 +19,10 @@
   }
 }
 
-.task-list-item-actions {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-
-  @include breakpoint-up($breakpoint-md) {
-    flex-shrink: 0;
-  }
+.task-list-item:hover {
+  border-color: var(--color-primary);
 }
 
-// Categorías: mantienen el grid responsive, tienen menos información por card
 .category-list {
   display: grid;
   grid-template-columns: 1fr;
@@ -44,11 +37,32 @@
   }
 }
 
+.category-list-item {
+  position: relative;
+}
+
+.category-list-item:hover {
+  border-color: var(--color-primary);
+}
+
+.stretched-link {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+}
+
+.task-list-item-actions,
 .category-list-item-actions {
+  position: relative;
+  z-index: 2;
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
   margin-top: var(--space-2);
+
+  @include breakpoint-up($breakpoint-md) {
+    flex-shrink: 0;
+  }
 }
 
 .task-list-item-content,
@@ -73,6 +87,8 @@
   border-left: 3px solid var(--color-danger);
 }
 
+// Punto 6: color distintivo (no atenuado/gris) para tareas completadas.
 .task-list-item-completed {
-  opacity: 0.6;
+  border-left: 3px solid var(--color-success);
+  background: rgb(34 197 94 / 6%);
 }

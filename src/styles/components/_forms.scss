@@ -94,3 +94,11 @@
   gap: var(--space-2);
   margin-top: var(--space-2);
 }
+
+.form-group select:disabled,
+.form-group input:disabled,
+.form-group textarea:disabled {
+  background: var(--color-border);
+  color: var(--color-text-muted);
+  cursor: not-allowed;
+}

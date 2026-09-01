@@ -10,9 +10,12 @@
       Creada: {{ c.createdAt | friendlyDate }} · Modificada: {{ c.updatedAt | friendlyDate }}
     </p>
 
-    <a [routerLink]="['/tasks/new']" [queryParams]="{ categoryId: c.id }" class="btn-primary">
-      + Crear tarea aquí
-    </a>
+    <div class="detail-section-header">
+      <h3>Tareas asociadas</h3>
+      <a [routerLink]="['/tasks/new']" [queryParams]="{ categoryId: c.id }" class="btn-primary btn-sm">
+        + Crear tarea aquí
+      </a>
+    </div>
 
     @if (associatedTasks().length > 0) {
       <div class="task-chip-list">

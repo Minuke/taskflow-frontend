@@ -126,8 +126,8 @@ export class TaskList {
     this.tasksStore.load();
   }
 
-  protected onToggleComplete(taskId: number): void {
-    this.tasksStore.toggleComplete(taskId);
+  protected onCompleteRequested(taskId: number): void {
+    this.tasksStore.complete(taskId);
   }
 
   protected resetFilters(): void {

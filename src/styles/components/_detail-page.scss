@@ -34,3 +34,16 @@
   border-color: var(--color-primary);
   text-decoration: none;
 }
+
+.detail-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.btn-sm {
+  padding: var(--space-1) var(--space-3);
+  font-size: 0.85rem;
+}

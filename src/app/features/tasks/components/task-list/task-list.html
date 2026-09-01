@@ -40,7 +40,7 @@
     [totalItems]="totalFilteredTasks()"
     [pageSize]="pageSize"
     [currentPage]="currentPage()"
-    (toggleComplete)="onToggleComplete($event)"
+    (completeRequested)="onCompleteRequested($event)"
     (deleteRequested)="onDeleteRequested($event)"
     (pageChanged)="onPageChanged($event)">
   </app-task-results-list>

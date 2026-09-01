@@ -21,7 +21,7 @@ export class TaskResultsList {
   readonly pageSize = input.required<number>();
   readonly currentPage = input.required<number>();
 
-  readonly toggleComplete = output<number>();
+  readonly completeRequested = output<number>();
   readonly deleteRequested = output<Task>();
   readonly pageChanged = output<number>();
 

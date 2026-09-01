@@ -68,12 +68,10 @@ export class TasksStore {
     this.tasks.update((list) => list.filter((task) => task.id !== id));
   }
 
-  toggleComplete(id: number): void {
+  complete(id: number): void {
     this.tasks.update((list) =>
       list.map((task) =>
-        task.id === id
-          ? { ...task, completed: !task.completed, updatedAt: new Date().toISOString() }
-          : task,
+        task.id === id ? { ...task, completed: true, updatedAt: new Date().toISOString() } : task,
       ),
     );
   }

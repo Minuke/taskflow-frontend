@@ -2,6 +2,7 @@
   @for (task of tasks(); track task.id) {
     <li class="task-list-item card card-compact" [class.task-list-item-overdue]="isOverdue(task.dueDate)"
       [class.task-list-item-completed]="task.completed">
+      <a class="stretched-link" [routerLink]="['/tasks', task.id]" [attr.aria-label]="'Ver ' + task.title"></a>
       <div class="task-list-item-content">
         <h4>{{ task.title }}</h4>
         <p>
@@ -16,11 +17,10 @@
         }
       </div>
       <div class="task-list-item-actions">
-        <a class="btn" [routerLink]="['/tasks', task.id]">Ver</a>
-        <a class="btn" [routerLink]="['/tasks', task.id, 'edit']">Editar</a>
-        <button type="button" (click)="toggleComplete.emit(task.id)">
-          {{ task.completed ? 'Reabrir' : 'Completar' }}
-        </button>
+        @if (!task.completed) {
+          <a class="btn" [routerLink]="['/tasks', task.id, 'edit']">Editar</a>
+          <button type="button" (click)="completeRequested.emit(task.id)">Completar</button>
+        }
         <button type="button" class="btn-danger" (click)="deleteRequested.emit(task)">Eliminar</button>
       </div>
     </li>
