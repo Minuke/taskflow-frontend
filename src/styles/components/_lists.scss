@@ -11,6 +11,7 @@
   display: flex;
   flex-direction: column;
   gap: var(--space-3);
+  border: 1px solid var(--color-text-muted);
 
   @include breakpoint-up($breakpoint-md) {
     flex-direction: row;
@@ -89,6 +90,10 @@
 
 // Punto 6: color distintivo (no atenuado/gris) para tareas completadas.
 .task-list-item-completed {
-  border-left: 3px solid var(--color-success);
-  background: rgb(34 197 94 / 6%);
+  border: 1px transparent solid;
+  background: rgb(17 24 39 / 3%);
+}
+
+.task-list-item-completed:hover {
+  border: 1px solid var(--color-text-muted);
 }

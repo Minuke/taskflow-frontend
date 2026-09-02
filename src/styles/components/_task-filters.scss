@@ -101,14 +101,14 @@
 }
 
 .filter-field-label {
-  display: block;
+  display: none;
   font-size: 0.75rem;
   font-weight: 600;
   color: var(--color-text-muted);
   margin-bottom: var(--space-1);
 
   @include breakpoint-up($breakpoint-lg) {
-    display: block; // Visible en escritorio, que es donde el <summary> se oculta y hace más falta.
+    display: block;
   }
 }
 
@@ -120,6 +120,7 @@
   background: var(--color-surface);
   color: var(--color-text);
   font: inherit;
+  padding-block: calc(var(--space-2) + 2px);
 }
 
 .filter-sort-row {

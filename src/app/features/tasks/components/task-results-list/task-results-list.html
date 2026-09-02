@@ -12,7 +12,7 @@
         @if (task.dueDate) {
           <p>Vence: {{ task.dueDate | friendlyDate }}</p>
         }
-        @if (task.priority === Priority.High) {
+        @if (task.priority === Priority.High && !task.completed) {
           <span class="priority-badge">⭐ Prioritaria</span>
         }
       </div>
@@ -27,5 +27,7 @@
   }
 </ul>
 
-<app-pagination [totalItems]="totalItems()" [pageSize]="pageSize()" [currentPage]="currentPage()"
-  (pageChanged)="pageChanged.emit($event)"></app-pagination>
+@if (totalItems() > pageSize()) {
+  <app-pagination [totalItems]="totalItems()" [pageSize]="pageSize()" [currentPage]="currentPage()"
+    (pageChanged)="pageChanged.emit($event)"></app-pagination>
+}

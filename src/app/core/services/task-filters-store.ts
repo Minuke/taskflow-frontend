@@ -26,7 +26,7 @@ const DEFAULTS: PersistedTaskFilters = {
   priorityFilter: 'all',
   categoryFilter: 'all',
   dueFilter: DueFilter.All,
-  sortField: 'createdAt',
+  sortField: 'updatedAt',
   sortDirection: 'desc',
 };
 

@@ -6,9 +6,6 @@
       <p>{{ c.description }}</p>
     }
     <p class="detail-meta">{{ associatedTasks().length }} tareas asociadas</p>
-    <p class="detail-dates">
-      Creada: {{ c.createdAt | friendlyDate }} · Modificada: {{ c.updatedAt | friendlyDate }}
-    </p>
 
     <div class="detail-section-header">
       <h3>Tareas asociadas</h3>
@@ -26,6 +23,10 @@
     } @else {
       <p class="empty-state">Esta categoría todavía no tiene tareas asociadas.</p>
     }
+
+    <p class="detail-dates">
+      Creada: {{ c.createdAt | friendlyDate }} · Modificada: {{ c.updatedAt | friendlyDate }}
+    </p>
   </div>
 } @else {
   <p class="empty-state">Esta categoría no existe o no tienes acceso a ella.</p>

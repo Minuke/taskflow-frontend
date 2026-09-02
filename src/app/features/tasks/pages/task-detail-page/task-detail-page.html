@@ -4,9 +4,9 @@
     <h2>{{ t.title }}</h2>
     <p class="detail-meta">
       {{ categoryName() }} · {{ t.priority | priorityLabel }} · {{ t.completed ? 'Completada' : 'Pendiente' }}
-      @if (t.priority === Priority.High) {
-        · <span class="priority-badge">⭐ Prioritaria</span>
-      }
+    @if (t.priority === Priority.High && !t.completed) {
+      · <span class="priority-badge">⭐ Prioritaria</span>
+    }
     </p>
     @if (t.dueDate) {
       <p>Fecha límite: {{ t.dueDate | friendlyDate }}</p>
