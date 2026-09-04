@@ -1,6 +1,6 @@
-import { Component, inject, input, computed } from '@angular/core';
-import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { Component, computed, inject, input } from '@angular/core';
+import { Router } from '@angular/router';
 import { TasksStore } from '@core/services/tasks-store';
 import { TaskForm } from '@features/tasks/components/task-form/task-form';
 

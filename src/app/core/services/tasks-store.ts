@@ -1,7 +1,7 @@
-import { Service, inject, signal, computed } from '@angular/core';
+import { computed, inject, Service, signal } from '@angular/core';
+import type { Priority } from '@core/models/priority.enum';
+import type { Task } from '@core/models/task.model';
 import { AuthStore } from '@core/services/auth-store';
-import { Task } from '@core/models/task.model';
-import { Priority } from '@core/models/priority.enum';
 import { createLoadableState } from '@core/utils/loadable-state.util';
 
 export interface TaskInput {

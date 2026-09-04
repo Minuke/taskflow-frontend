@@ -1,12 +1,12 @@
-import { Component, inject, input, computed, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
 import { Location } from '@angular/common';
-import { TasksStore } from '@core/services/tasks-store';
-import { CategoriesStore } from '@core/services/categories-store';
-import { PriorityLabelPipe } from '@core/pipes/priority-label.pipe';
-import { FriendlyDatePipe } from '@core/pipes/friendly-date.pipe';
-import { ConfirmDialog } from '@shared/components/confirm-dialog/confirm-dialog';
+import { Component, computed, inject, input, signal } from '@angular/core';
+import { Router, RouterLink } from '@angular/router';
 import { Priority } from '@core/models/priority.enum';
+import { FriendlyDatePipe } from '@core/pipes/friendly-date.pipe';
+import { PriorityLabelPipe } from '@core/pipes/priority-label.pipe';
+import { CategoriesStore } from '@core/services/categories-store';
+import { TasksStore } from '@core/services/tasks-store';
+import { ConfirmDialog } from '@shared/components/confirm-dialog/confirm-dialog';
 
 @Component({
   selector: 'app-task-detail-page',

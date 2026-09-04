@@ -7,5 +7,4 @@ import { LoginForm } from '@features/auth/components/login-form/login-form';
   styleUrl: './login-page.scss',
   templateUrl: './login-page.html',
 })
-export class LoginPage {
-}
+export class LoginPage {}

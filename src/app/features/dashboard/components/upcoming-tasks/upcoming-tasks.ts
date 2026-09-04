@@ -1,9 +1,9 @@
-import { Component, inject, computed } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TasksStore } from '@core/services/tasks-store';
-import { CategoriesStore } from '@core/services/categories-store';
-import { PriorityLabelPipe } from '@core/pipes/priority-label.pipe';
 import { FriendlyDatePipe } from '@core/pipes/friendly-date.pipe';
+import { PriorityLabelPipe } from '@core/pipes/priority-label.pipe';
+import { CategoriesStore } from '@core/services/categories-store';
+import { TasksStore } from '@core/services/tasks-store';
 
 const UPCOMING_LIMIT = 4;
 

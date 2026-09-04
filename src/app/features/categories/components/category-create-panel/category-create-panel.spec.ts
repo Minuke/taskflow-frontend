@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { CategoryCreatePanel } from './category-create-panel';
 
 describe('CategoryCreatePanel', () => {
@@ -7,9 +7,8 @@ describe('CategoryCreatePanel', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CategoryCreatePanel]
-    })
-      .compileComponents();
+      imports: [CategoryCreatePanel],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CategoryCreatePanel);
     component = fixture.componentInstance;

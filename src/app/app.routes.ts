@@ -1,4 +1,4 @@
-import { Routes } from '@angular/router';
+import type { Routes } from '@angular/router';
 import { authGuard } from '@core/guards/auth-guard';
 
 export const routes: Routes = [
@@ -11,7 +11,9 @@ export const routes: Routes = [
     path: 'dashboard',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./features/dashboard/pages/dashboard-page/dashboard-page').then((c) => c.DashboardPage),
+      import('./features/dashboard/pages/dashboard-page/dashboard-page').then(
+        (c) => c.DashboardPage,
+      ),
   },
   {
     path: 'tasks',
@@ -35,13 +37,17 @@ export const routes: Routes = [
     path: 'tasks/:id',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./features/tasks/pages/task-detail-page/task-detail-page').then((c) => c.TaskDetailPage),
+      import('./features/tasks/pages/task-detail-page/task-detail-page').then(
+        (c) => c.TaskDetailPage,
+      ),
   },
   {
     path: 'categories',
     canActivate: [authGuard],
     loadComponent: () =>
-      import('./features/categories/pages/categories-page/categories-page').then((c) => c.CategoriesPage),
+      import('./features/categories/pages/categories-page/categories-page').then(
+        (c) => c.CategoriesPage,
+      ),
   },
   {
     path: 'categories/new',

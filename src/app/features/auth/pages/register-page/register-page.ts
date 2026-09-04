@@ -7,5 +7,4 @@ import { RegisterForm } from '@features/auth/components/register-form/register-f
   styleUrl: './register-page.scss',
   templateUrl: './register-page.html',
 })
-export class RegisterPage {
-}
+export class RegisterPage {}

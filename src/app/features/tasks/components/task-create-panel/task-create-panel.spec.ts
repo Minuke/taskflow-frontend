@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { TaskCreatePanel } from './task-create-panel';
 
 describe('TaskCreatePanel', () => {
@@ -7,9 +7,8 @@ describe('TaskCreatePanel', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TaskCreatePanel]
-    })
-      .compileComponents();
+      imports: [TaskCreatePanel],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TaskCreatePanel);
     component = fixture.componentInstance;

@@ -1,4 +1,4 @@
-import { Priority } from './priority.enum';
+import type { Priority } from './priority.enum';
 
 export interface Task {
   id: number;

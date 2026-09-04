@@ -1,7 +1,7 @@
-import { Component, inject, input, output, signal, effect } from '@angular/core';
-import { form, FormField, required, minLength, maxLength, submit } from '@angular/forms/signals';
+import { Component, effect, inject, input, output, signal } from '@angular/core';
+import { FormField, form, maxLength, minLength, required, submit } from '@angular/forms/signals';
+import type { Category } from '@core/models/category.model';
 import { CategoriesStore } from '@core/services/categories-store';
-import { Category } from '@core/models/category.model';
 
 interface CategoryFormModel {
   name: string;
@@ -27,7 +27,9 @@ export class CategoryForm {
     required(schema.name, { message: 'El nombre es obligatorio.' });
     minLength(schema.name, 2, { message: 'El nombre debe tener al menos 2 caracteres.' });
     maxLength(schema.name, 40, { message: 'El nombre no puede superar los 40 caracteres.' });
-    maxLength(schema.description, 200, { message: 'La descripción no puede superar los 200 caracteres.' });
+    maxLength(schema.description, 200, {
+      message: 'La descripción no puede superar los 200 caracteres.',
+    });
   });
 
   constructor() {

@@ -1,4 +1,4 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import { Pipe, type PipeTransform } from '@angular/core';
 import { Priority } from '@core/models/priority.enum';
 
 const PRIORITY_LABELS: Record<Priority, string> = {

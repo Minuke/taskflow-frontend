@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { PriorityTasks } from './priority-tasks';
 
 describe('PriorityTasks', () => {
@@ -7,9 +7,8 @@ describe('PriorityTasks', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [PriorityTasks]
-    })
-      .compileComponents();
+      imports: [PriorityTasks],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(PriorityTasks);
     component = fixture.componentInstance;

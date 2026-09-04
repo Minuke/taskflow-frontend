@@ -1,12 +1,12 @@
-import { Component, inject, computed } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
-import { TasksStore } from '@core/services/tasks-store';
 import { Priority } from '@core/models/priority.enum';
+import { TasksStore } from '@core/services/tasks-store';
+import { DashboardEmptyState } from '@features/dashboard/components/dashboard-empty-state/dashboard-empty-state';
 import { DashboardSummary } from '@features/dashboard/components/dashboard-summary/dashboard-summary';
-import { UpcomingTasks } from '@features/dashboard/components/upcoming-tasks/upcoming-tasks';
 import { PriorityTasks } from '@features/dashboard/components/priority-tasks/priority-tasks';
 import { RecentTasks } from '@features/dashboard/components/recent-tasks/recent-tasks';
-import { DashboardEmptyState } from '@features/dashboard/components/dashboard-empty-state/dashboard-empty-state';
+import { UpcomingTasks } from '@features/dashboard/components/upcoming-tasks/upcoming-tasks';
 import { SkeletonList } from '@shared/components/skeleton-list/skeleton-list';
 
 @Component({

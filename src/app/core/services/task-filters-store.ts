@@ -1,7 +1,7 @@
-import { Service, signal, effect } from '@angular/core';
-import { Priority } from '@core/models/priority.enum';
-import { TaskStatus } from '@core/models/task-status.enum';
+import { effect, Service, signal } from '@angular/core';
 import { DueFilter } from '@core/models/due-filter.enum';
+import type { Priority } from '@core/models/priority.enum';
+import { TaskStatus } from '@core/models/task-status.enum';
 
 export type TaskSortField = 'title' | 'priority' | 'dueDate' | 'createdAt' | 'updatedAt';
 export type SortDirection = 'asc' | 'desc';

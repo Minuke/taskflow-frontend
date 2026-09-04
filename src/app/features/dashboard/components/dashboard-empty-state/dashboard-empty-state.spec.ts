@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { DashboardEmptyState } from './dashboard-empty-state';
 
 describe('DashboardEmptyState', () => {
@@ -7,9 +7,8 @@ describe('DashboardEmptyState', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [DashboardEmptyState]
-    })
-      .compileComponents();
+      imports: [DashboardEmptyState],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(DashboardEmptyState);
     component = fixture.componentInstance;

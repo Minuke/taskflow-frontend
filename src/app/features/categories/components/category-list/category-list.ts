@@ -1,8 +1,8 @@
 import { Component, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import type { Category } from '@core/models/category.model';
 import { CategoriesStore } from '@core/services/categories-store';
 import { TasksStore } from '@core/services/tasks-store';
-import { Category } from '@core/models/category.model';
 import { ConfirmDialog } from '@shared/components/confirm-dialog/confirm-dialog';
 import { SkeletonList } from '@shared/components/skeleton-list/skeleton-list';
 

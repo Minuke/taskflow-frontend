@@ -1,14 +1,14 @@
 import { Component, inject, signal } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
 import {
-  form,
-  FormField,
-  required,
   email as emailValidator,
+  FormField,
+  form,
   minLength,
-  validate,
+  required,
   submit,
+  validate,
 } from '@angular/forms/signals';
+import { Router, RouterLink } from '@angular/router';
 import { AuthStore } from '@core/services/auth-store';
 
 interface RegisterFormModel {
@@ -48,13 +48,15 @@ export class RegisterForm {
     minLength(schema.password, 8, { message: 'La contraseña debe tener al menos 8 caracteres.' });
 
     required(schema.confirmPassword, { message: 'Confirma la contraseña.' });
-    validate(schema.confirmPassword, ({ value, valueOf, stateOf }) => {
+    validate(schema.confirmPassword, ({ value, valueOf: passwordValueOf, stateOf }) => {
       if (!stateOf(schema.password).touched()) {
         return null;
       }
-      if (value() !== valueOf(schema.password)) {
+
+      if (value() !== passwordValueOf(schema.password)) {
         return { kind: 'passwordMismatch', message: 'Las contraseñas no coinciden.' };
       }
+
       return null;
     });
   });

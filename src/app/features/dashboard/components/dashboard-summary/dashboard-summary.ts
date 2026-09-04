@@ -1,7 +1,7 @@
-import { Component, inject, computed } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
+import { Priority } from '@core/models/priority.enum';
 import { TasksStore } from '@core/services/tasks-store';
 import { isDueToday } from '@core/utils/task-date.utils';
-import { Priority } from '@core/models/priority.enum';
 
 @Component({
   selector: 'app-dashboard-summary',

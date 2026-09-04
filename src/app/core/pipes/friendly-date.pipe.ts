@@ -1,5 +1,5 @@
-import { Pipe, PipeTransform } from '@angular/core';
 import { formatDate } from '@angular/common';
+import { Pipe, type PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'friendlyDate',

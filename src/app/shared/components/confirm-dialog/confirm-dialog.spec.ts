@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { ConfirmDialog } from './confirm-dialog';
 
 describe('ConfirmDialog', () => {
@@ -7,9 +7,8 @@ describe('ConfirmDialog', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ConfirmDialog]
-    })
-      .compileComponents();
+      imports: [ConfirmDialog],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(ConfirmDialog);
     component = fixture.componentInstance;

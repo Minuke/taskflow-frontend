@@ -1,6 +1,6 @@
 import { Component, inject, signal } from '@angular/core';
+import { email as emailValidator, FormField, form, required, submit } from '@angular/forms/signals';
 import { Router, RouterLink } from '@angular/router';
-import { form, FormField, required, email as emailValidator, submit } from '@angular/forms/signals';
 import { AuthStore } from '@core/services/auth-store';
 
 interface LoginFormModel {

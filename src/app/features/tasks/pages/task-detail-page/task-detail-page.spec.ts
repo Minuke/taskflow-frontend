@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { TaskDetailPage } from './task-detail-page';
 
 describe('TaskDetailPage', () => {
@@ -7,9 +7,8 @@ describe('TaskDetailPage', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TaskDetailPage]
-    })
-      .compileComponents();
+      imports: [TaskDetailPage],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(TaskDetailPage);
     component = fixture.componentInstance;

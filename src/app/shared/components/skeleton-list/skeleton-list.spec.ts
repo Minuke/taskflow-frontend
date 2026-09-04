@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { SkeletonList } from './skeleton-list';
 
 describe('SkeletonList', () => {
@@ -7,9 +7,8 @@ describe('SkeletonList', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SkeletonList]
-    })
-      .compileComponents();
+      imports: [SkeletonList],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(SkeletonList);
     component = fixture.componentInstance;

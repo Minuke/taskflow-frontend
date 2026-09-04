@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { CategoryEditPage } from './category-edit-page';
 
 describe('CategoryEditPage', () => {
@@ -7,9 +7,8 @@ describe('CategoryEditPage', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CategoryEditPage]
-    })
-      .compileComponents();
+      imports: [CategoryEditPage],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(CategoryEditPage);
     component = fixture.componentInstance;

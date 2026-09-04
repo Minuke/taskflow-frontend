@@ -1,9 +1,19 @@
-import { Component, inject, input, output, signal, effect, computed } from '@angular/core';
-import { form, FormField, required, minLength, maxLength, min, validate, submit, disabled } from '@angular/forms/signals';
-import { TasksStore, TaskInput } from '@core/services/tasks-store';
-import { CategoriesStore } from '@core/services/categories-store';
-import { Task } from '@core/models/task.model';
+import { Component, computed, effect, inject, input, output, signal } from '@angular/core';
+import {
+  disabled,
+  FormField,
+  form,
+  maxLength,
+  min,
+  minLength,
+  required,
+  submit,
+  validate,
+} from '@angular/forms/signals';
 import { Priority } from '@core/models/priority.enum';
+import type { Task } from '@core/models/task.model';
+import { CategoriesStore } from '@core/services/categories-store';
+import { type TaskInput, TasksStore } from '@core/services/tasks-store';
 import { todayIsoDate } from '@core/utils/task-date.utils';
 
 interface TaskFormModel {
@@ -35,7 +45,9 @@ export class TaskForm {
   protected readonly Priority = Priority;
   protected readonly minDueDate = todayIsoDate();
 
-  protected readonly isCategoryLocked = computed(() => !this.task() && this.presetCategoryId() !== null);
+  protected readonly isCategoryLocked = computed(
+    () => !this.task() && this.presetCategoryId() !== null,
+  );
 
   protected readonly model = signal<TaskFormModel>(this.emptyModel());
 
@@ -43,10 +55,12 @@ export class TaskForm {
     required(schema.title, { message: 'El título es obligatorio.' });
     minLength(schema.title, 3, { message: 'El título debe tener al menos 3 caracteres.' });
     maxLength(schema.title, 80, { message: 'El título no puede superar los 80 caracteres.' });
-    maxLength(schema.description, 500, { message: 'La descripción no puede superar los 500 caracteres.' });
+    maxLength(schema.description, 500, {
+      message: 'La descripción no puede superar los 500 caracteres.',
+    });
     required(schema.estimatedHours, { message: 'Las horas estimadas son obligatorias.' });
     min(schema.estimatedHours, 0, { message: 'Las horas estimadas no pueden ser negativas.' });
-      
+
     disabled(schema.categoryId, {
       when: () => this.isCategoryLocked(),
     });

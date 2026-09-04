@@ -1,6 +1,6 @@
-import { Component, inject, input, computed } from '@angular/core';
-import { Router } from '@angular/router';
 import { Location } from '@angular/common';
+import { Component, computed, inject, input } from '@angular/core';
+import { Router } from '@angular/router';
 import { CategoriesStore } from '@core/services/categories-store';
 import { CategoryForm } from '@features/categories/components/category-form/category-form';
 
@@ -17,7 +17,9 @@ export class CategoryEditPage {
   private readonly categoriesStore = inject(CategoriesStore);
   private readonly router = inject(Router);
 
-  protected readonly category = computed(() => this.categoriesStore.categoryById(Number(this.id())));
+  protected readonly category = computed(() =>
+    this.categoriesStore.categoryById(Number(this.id())),
+  );
 
   protected async onSaved(): Promise<void> {
     await this.router.navigate(['/categories']);

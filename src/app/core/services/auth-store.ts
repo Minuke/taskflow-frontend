@@ -1,5 +1,5 @@
-import { Service, signal, computed } from '@angular/core';
-import { User } from '@core/models/user.model';
+import { computed, Service, signal } from '@angular/core';
+import type { User } from '@core/models/user.model';
 
 interface StoredUser extends User {
   password: string; // Solo en memoria. En B3 esto lo gestionará el backend con hash (bcrypt), nunca en plano.
@@ -8,15 +8,15 @@ interface StoredUser extends User {
 @Service()
 export class AuthStore {
   private readonly users = signal<StoredUser[]>([
-  {
-    id: 1,
-    name: 'Admin',
-    email: 'admin@taskflow.dev',
-    password: 'Admin1234',
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  },
-]);
+    {
+      id: 1,
+      name: 'Admin',
+      email: 'admin@taskflow.dev',
+      password: 'Admin1234',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    },
+  ]);
   private readonly currentUser = signal<User | null>(null);
 
   readonly user = this.currentUser.asReadonly();
@@ -44,9 +44,7 @@ export class AuthStore {
 
   login(email: string, password: string): void {
     const normalizedEmail = email.trim().toLowerCase();
-    const found = this.users().find(
-      (u) => u.email === normalizedEmail && u.password === password,
-    );
+    const found = this.users().find((u) => u.email === normalizedEmail && u.password === password);
 
     if (!found) {
       throw new Error('INVALID_CREDENTIALS');

@@ -1,8 +1,8 @@
-import { Component, input, output, signal, computed } from '@angular/core';
-import { Category } from '@core/models/category.model';
+import { Component, computed, input, output, signal } from '@angular/core';
+import type { Category } from '@core/models/category.model';
+import { DueFilter } from '@core/models/due-filter.enum';
 import { Priority } from '@core/models/priority.enum';
 import { TaskStatus } from '@core/models/task-status.enum';
-import { DueFilter } from '@core/models/due-filter.enum';
 
 export type TaskSortField = 'title' | 'priority' | 'dueDate' | 'createdAt' | 'updatedAt';
 export type SortDirection = 'asc' | 'desc';

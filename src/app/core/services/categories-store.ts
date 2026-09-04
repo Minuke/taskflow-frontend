@@ -1,6 +1,6 @@
-import { Service, inject, signal, computed } from '@angular/core';
+import { computed, inject, Service, signal } from '@angular/core';
+import type { Category } from '@core/models/category.model';
 import { AuthStore } from '@core/services/auth-store';
-import { Category } from '@core/models/category.model';
 import { createLoadableState } from '@core/utils/loadable-state.util';
 
 @Service()
@@ -62,5 +62,4 @@ export class CategoriesStore {
   categoryById(id: number): Category | undefined {
     return this.userCategories().find((category) => category.id === id);
   }
-
 }

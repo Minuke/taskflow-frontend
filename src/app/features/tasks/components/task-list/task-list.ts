@@ -1,17 +1,16 @@
-import { Component, inject, signal, computed, effect } from '@angular/core';
-import { TasksStore } from '@core/services/tasks-store';
+import { Component, computed, effect, inject, signal } from '@angular/core';
+import { DueFilter } from '@core/models/due-filter.enum';
+import type { Task } from '@core/models/task.model';
+import { TaskStatus } from '@core/models/task-status.enum';
 import { CategoriesStore } from '@core/services/categories-store';
-import { TaskFiltersStore } from '@core/services/task-filters-store';
-import { ConfirmDialog } from '@shared/components/confirm-dialog/confirm-dialog';
-import { SkeletonList } from '@shared/components/skeleton-list/skeleton-list';
+import { TaskFiltersStore, type TaskSortField } from '@core/services/task-filters-store';
+import { TasksStore } from '@core/services/tasks-store';
+import { priorityWeight } from '@core/utils/priority.utils';
+import { isDueToday, isOverdue, isUpcoming } from '@core/utils/task-date.utils';
 import { TaskFiltersPanel } from '@features/tasks/components/task-filters-panel/task-filters-panel';
 import { TaskResultsList } from '@features/tasks/components/task-results-list/task-results-list';
-import { Task } from '@core/models/task.model';
-import { TaskStatus } from '@core/models/task-status.enum';
-import { DueFilter } from '@core/models/due-filter.enum';
-import { isOverdue, isDueToday, isUpcoming } from '@core/utils/task-date.utils';
-import { priorityWeight } from '@core/utils/priority.utils';
-import { TaskSortField } from '@core/services/task-filters-store';
+import { ConfirmDialog } from '@shared/components/confirm-dialog/confirm-dialog';
+import { SkeletonList } from '@shared/components/skeleton-list/skeleton-list';
 
 const PAGE_SIZE = 10;
 

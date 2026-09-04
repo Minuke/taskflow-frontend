@@ -1,4 +1,4 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { type ComponentFixture, TestBed } from '@angular/core/testing';
 import { RegisterForm } from './register-form';
 
 describe('RegisterForm', () => {
@@ -7,9 +7,8 @@ describe('RegisterForm', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [RegisterForm]
-    })
-      .compileComponents();
+      imports: [RegisterForm],
+    }).compileComponents();
 
     fixture = TestBed.createComponent(RegisterForm);
     component = fixture.componentInstance;
