@@ -42,3 +42,10 @@ __screenshots__/
 # System files
 .DS_Store
 Thumbs.db
+
+# Environment
+.env
+
+# SonarQube
+.sonar_lock
+report-task.txt
