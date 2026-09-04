@@ -5,7 +5,16 @@
   grid-template-columns: 1fr;
   gap: var(--space-4);
   margin-top: var(--space-4);
+}
 
+.dashboard-columns-2 {
+  @include breakpoint-up($breakpoint-md) {
+    grid-template-columns: repeat(2, 1fr);
+    align-items: start;
+  }
+}
+
+.dashboard-columns-3 {
   @include breakpoint-up($breakpoint-lg) {
     grid-template-columns: repeat(3, 1fr);
     align-items: start;

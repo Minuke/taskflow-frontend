@@ -12,6 +12,7 @@ import { TaskForm } from '@features/tasks/components/task-form/task-form';
 })
 export class TaskEditPage {
   readonly id = input.required<string>();
+  readonly returnTo = input<string>();
 
   private readonly location = inject(Location);
   private readonly tasksStore = inject(TasksStore);
@@ -20,7 +21,7 @@ export class TaskEditPage {
   protected readonly task = computed(() => this.tasksStore.taskById(Number(this.id())));
 
   protected async onSaved(): Promise<void> {
-    await this.router.navigate(['/tasks']);
+    await this.router.navigateByUrl(this.returnTo() ?? '/tasks');
   }
 
   protected onCancelled(): void {

@@ -16,7 +16,12 @@ export class TaskCreatePanel {
   private readonly router = inject(Router);
 
   protected async onSaved(): Promise<void> {
-    await this.router.navigate(['/tasks']);
+    const categoryId = this.presetCategoryId();
+    if (categoryId) {
+      await this.router.navigate(['/categories', categoryId]);
+    } else {
+      await this.router.navigate(['/tasks']);
+    }
   }
 
   protected goBack(): void {

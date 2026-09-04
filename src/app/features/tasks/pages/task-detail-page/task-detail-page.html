@@ -1,27 +1,47 @@
 @if (task(); as t) {
-  <div class="detail-page card">
-    <button type="button" class="form-panel-back" (click)="goBack()">← Volver atrás</button>
-    <h2>{{ t.title }}</h2>
-    <p class="detail-meta">
-      {{ categoryName() }} · {{ t.priority | priorityLabel }} · {{ t.completed ? 'Completada' : 'Pendiente' }}
+<div class="detail-page card">
+  <button type="button" class="form-panel-back" (click)="goBack()">← Volver atrás</button>
+  <h2>{{ t.title }}</h2>
+  <p class="detail-meta">
+    {{ categoryName() }} · {{ t.priority | priorityLabel }} · {{ t.completed ? 'Completada' : 'Pendiente' }}
     @if (t.priority === Priority.High && !t.completed) {
-      · <span class="priority-badge">⭐ Prioritaria</span>
+    · <span class="priority-badge">⭐ Prioritaria</span>
     }
-    </p>
-    @if (t.dueDate) {
-      <p>Fecha límite: {{ t.dueDate | friendlyDate }}</p>
-    }
-    <p>Horas estimadas: {{ t.estimatedHours }}</p>
-    @if (t.description) {
-      <p>{{ t.description }}</p>
-    }
-    @if (t.image; as image) {
-      <img [src]="image" alt="Imagen de la tarea" class="detail-image" />
-    }
-    <p class="detail-dates">
-      Creada: {{ t.createdAt | friendlyDate }} · Modificada: {{ t.updatedAt | friendlyDate }}
-    </p>
+  </p>
+
+  <div class="detail-section-header">
+    <h3>Acciones</h3>
+    <div class="detail-actions">
+      @if (!t.completed) {
+      <a class="btn btn-sm" [routerLink]="['/tasks', t.id, 'edit']" [queryParams]="{ returnTo: effectiveReturnTo() }">
+        Editar
+      </a>
+      <button type="button" class="btn btn-sm" (click)="onComplete()">Completar</button>
+      }
+      <button type="button" class="btn-danger btn-sm" (click)="onDeleteRequested()">Eliminar</button>
+    </div>
   </div>
+
+  @if (t.dueDate) {
+  <p>Fecha límite: {{ t.dueDate | friendlyDate }}</p>
+  }
+  <p>Horas estimadas: {{ t.estimatedHours }}</p>
+  @if (t.description) {
+  <p>{{ t.description }}</p>
+  }
+  @if (t.image; as image) {
+  <img [src]="image" alt="Imagen de la tarea" class="detail-image" />
+  }
+  <p class="detail-dates">
+    Creada: {{ t.createdAt | friendlyDate }} · Modificada: {{ t.updatedAt | friendlyDate }}
+  </p>
+</div>
+
+@if (showDeleteConfirm()) {
+<app-confirm-dialog title="Eliminar tarea" (confirmed)="onDeleteConfirmed()" (cancelled)="onDeleteCancelled()">
+  ¿Seguro que quieres eliminar la tarea <strong>{{ t.title }}</strong>? Esta acción no se puede deshacer.
+</app-confirm-dialog>
+}
 } @else {
-  <p class="empty-state">Esta tarea no existe o no tienes acceso a ella.</p>
+<p class="empty-state">Esta tarea no existe o no tienes acceso a ella.</p>
 }

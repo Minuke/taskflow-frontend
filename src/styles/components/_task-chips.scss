@@ -18,3 +18,14 @@
   border-color: var(--color-primary);
   color: var(--color-primary);
 }
+
+.task-chip-completed {
+  background: rgb(17 24 39 / 3%);
+  border-color: transparent;
+  color: var(--color-text-muted);
+}
+
+.task-chip-completed:hover {
+  border-color: var(--color-text-muted);
+  color: var(--color-text-muted);
+}

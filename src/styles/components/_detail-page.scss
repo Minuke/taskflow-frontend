@@ -57,3 +57,8 @@
 .task-mini-card-completed:hover {
   border: 1px solid var(--color-text-muted);
 }
+
+.detail-actions {
+  display: flex;
+  gap: var(--space-2);
+}

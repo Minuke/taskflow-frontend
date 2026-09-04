@@ -9,7 +9,7 @@
           {{ categoryNameFor(task.categoryId) }} · {{ task.priority | priorityLabel }} ·
           {{ task.completed ? 'Completada' : 'Pendiente' }}
         </p>
-        @if (task.dueDate) {
+        @if (task.dueDate && !task.completed) {
           <p>Vence: {{ task.dueDate | friendlyDate }}</p>
         }
         @if (task.priority === Priority.High && !task.completed) {

@@ -19,9 +19,14 @@
   <app-dashboard-empty-state></app-dashboard-empty-state>
 } @else {
   <app-dashboard-summary></app-dashboard-summary>
-  <div class="dashboard-columns">
-    <app-upcoming-tasks></app-upcoming-tasks>
-    <app-priority-tasks></app-priority-tasks>
+  <div class="dashboard-columns" [class.dashboard-columns-2]="visibleColumnsCount() === 2"
+    [class.dashboard-columns-3]="visibleColumnsCount() === 3">
+    @if (hasUpcoming()) {
+      <app-upcoming-tasks></app-upcoming-tasks>
+    }
+    @if (hasPriority()) {
+      <app-priority-tasks></app-priority-tasks>
+    }
     <app-recent-tasks></app-recent-tasks>
   </div>
 }
